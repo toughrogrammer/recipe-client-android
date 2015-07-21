@@ -2,16 +2,54 @@ package kr.swmaestro.recipe;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
+
+    DrawerLayout drawer;
+    TabLayout tab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
+        NavigationView nv = (NavigationView) findViewById(R.id.navigation_view);
+        nv.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        if (menuItem.isCheckable()) {
+                            menuItem.setChecked(true);
+                        }
+                        Toast.makeText(getApplicationContext(),
+                                menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        drawer.closeDrawers();
+                        return true;
+                    }
+                });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar ab = getSupportActionBar();
+        //if (null != ab) {
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setDisplayHomeAsUpEnabled(true);
+        //}
+
+
     }
 
     @Override
