@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_settings:
                 return true;
-            case R.id.home: //ActionBar Home button
+            case android.R.id.home: //ActionBar Home button
                 drawer.openDrawer(GravityCompat.START); //Open Drawer
                 return true;
         }
