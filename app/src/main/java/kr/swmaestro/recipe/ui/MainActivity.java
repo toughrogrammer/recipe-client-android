@@ -1,4 +1,4 @@
-package kr.swmaestro.recipe;
+package kr.swmaestro.recipe.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import kr.swmaestro.recipe.R;
 
 
 public class MainActivity extends AppCompatActivity {
