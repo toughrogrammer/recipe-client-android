@@ -4,12 +4,20 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 
+import org.apache.http.Header;
+import org.json.JSONObject;
+
+import java.io.IOError;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +28,6 @@ public class SignUpRequest extends Request<String> {
 
     private Map<String, String> mParams;
     private Response.Listener<String> listener;
-    private final Gson gson = new Gson();
 
 
     public SignUpRequest(String username, String email, String password, Response.Listener<String> successListener, Response.ErrorListener errorListener) {
@@ -41,15 +48,23 @@ public class SignUpRequest extends Request<String> {
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String parsed = null;
-        try {
 
+
+
+        try {
             parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return Response.error(new VolleyError(e));
         }
 
-        return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
+    }
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        HashMap<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json; charset=utf-8");
+        return headers;
     }
 
     @Override
@@ -59,7 +74,7 @@ public class SignUpRequest extends Request<String> {
 
     @Override
     protected void deliverResponse(String response) {
-
+        listener.onResponse(response);
     }
 
 }

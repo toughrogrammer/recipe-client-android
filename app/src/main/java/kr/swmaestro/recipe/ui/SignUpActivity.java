@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -51,7 +52,6 @@ public class SignUpActivity extends AppCompatActivity {
                 mEmail = emailEt.getText().toString();
                 mPassword = passwordEt.getText().toString();
                 //mGender = genderEt.getText().toString();
-                Log.i("test",mUsername + mEmail + mPassword);
 
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
@@ -60,13 +60,15 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                         Log.i("test", response);
+                        TextView mTextView = (TextView)findViewById(R.id.textView);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley","SignUp Request : "+error.networkResponse);
                     }
                 });
-                Log.i("test",stringRequest.toString());
                 queue.add(stringRequest);
             }
         });
