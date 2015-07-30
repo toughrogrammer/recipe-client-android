@@ -60,12 +60,6 @@ public class SignUpRequest extends Request<String> {
         }
 
     }
-    @Override
-    public Map<String, String> getHeaders() throws AuthFailureError {
-        HashMap<String, String> headers = new HashMap<String, String>();
-        headers.put("Content-Type", "application/json; charset=utf-8");
-        return headers;
-    }
 
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
