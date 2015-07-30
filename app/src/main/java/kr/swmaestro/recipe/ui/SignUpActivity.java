@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,6 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.util.SignUpRequest;
 
@@ -58,9 +63,19 @@ public class SignUpActivity extends AppCompatActivity {
                 Request stringRequest = new SignUpRequest(mUsername, mEmail, mPassword, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                        Log.i("test", response);
+                        HashMap<String,String> map = new ErrorMap();
+
                         TextView mTextView = (TextView)findViewById(R.id.textView);
+
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            if(json.has("error"))
+                                mTextView.setText(map.get(json.get("error").toString()));
+                            else
+                                mTextView.setText("정상가입");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }, new Response.ErrorListener() {
