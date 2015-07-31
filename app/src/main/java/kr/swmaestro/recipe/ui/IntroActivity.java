@@ -12,13 +12,14 @@ import kr.swmaestro.recipe.R;
 /**
  * Created by lk on 2015. 7. 31..
  */
+
+
 public class IntroActivity extends AppCompatActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
