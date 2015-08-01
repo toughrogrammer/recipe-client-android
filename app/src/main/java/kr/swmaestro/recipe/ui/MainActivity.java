@@ -30,17 +30,34 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private final String TAG = "MainActivity";
 
     private SwipeRefreshLayout swipeLayout;
-    DrawerLayout drawer;
-    ListView mListView;
+    private DrawerLayout drawer;
 
-    ArrayAdapter<String> mAdapter;
-    ArrayList<String> mBlackList = new ArrayList<String>();
+    private ArrayAdapter<String> mAdapter;
+    private ArrayList<String> mBlackList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initToolbar();
+        initNavtigationView();
+        initListView();
+        initSwipeRefreshLayout();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar ab = getSupportActionBar();
+        if (null != ab) {
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initNavtigationView() {
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         NavigationView nv = (NavigationView) findViewById(R.id.navigation_view);
         nv.setNavigationItemSelectedListener(
@@ -56,25 +73,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         return true;
                     }
                 });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar ab = getSupportActionBar();
-        if (null != ab) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
-
-        initListView();
-        initSwipeRefreshLayout();
     }
 
     private void initListView() {
 
-        mListView = (ListView) findViewById(R.id.activity_main_listview);
+        ListView listView = (ListView) findViewById(R.id.activity_main_listview);
 
         // Set up ListView example
+        /*
+         * Todo Make a example data, We should make data from Model class
+         */
         String[] items = new String[20];
         for (int i = 0; i < items.length; i++) {
             items[i] = "Item " + (i + 1);
@@ -85,11 +93,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 android.R.id.text1,
                 new ArrayList<String>(Arrays.asList(items)));
 
-        mListView.setAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
-                        mListView,
+                        listView,
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
                             @Override
                             public boolean canDismiss(int position) {
@@ -107,12 +115,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                 Log.d(TAG, mBlackList.toString());
                             }
                         });
-        mListView.setOnTouchListener(touchListener);
+        listView.setOnTouchListener(touchListener);
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
-        mListView.setOnScrollListener(touchListener.makeScrollListener());
+        listView.setOnScrollListener(touchListener.makeScrollListener());
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
