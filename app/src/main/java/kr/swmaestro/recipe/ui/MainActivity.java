@@ -1,22 +1,41 @@
 package kr.swmaestro.recipe.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import kr.swmaestro.recipe.R;
+import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    public String TAG = "MainActivity";
+
+    private SwipeRefreshLayout swipeLayout;
     DrawerLayout drawer;
+    ListView mListView;
+
+    ArrayAdapter<String> mAdapter;
+    ArrayList<String> mBlackList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +67,65 @@ public class MainActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
+        initListView();
+        initSwipeRefreshLayout();
+    }
 
+    private void initListView() {
+
+        mListView = (ListView) findViewById(R.id.activity_main_listview);
+
+        // Set up ListView example
+        String[] items = new String[20];
+        for (int i = 0; i < items.length; i++) {
+            items[i] = "Item " + (i + 1);
+        }
+
+        mAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                new ArrayList<String>(Arrays.asList(items)));
+
+        mListView.setAdapter(mAdapter);
+
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        mListView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    mBlackList.add(mAdapter.getItem(position));
+                                    mAdapter.remove(mAdapter.getItem(position));
+                                }
+                                mAdapter.notifyDataSetChanged();
+                                //Toast.makeText(getApplicationContext(),mBlackList.toString(),Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, mBlackList.toString());
+                            }
+                        });
+        mListView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        mListView.setOnScrollListener(touchListener.makeScrollListener());
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void initSwipeRefreshLayout() {
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.pulltorefresh_color1),getResources().getColor(R.color.pulltorefresh_color2),getResources().getColor(R.color.pulltorefresh_color3));
     }
 
     @Override
@@ -70,5 +147,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        Toast.makeText(getApplicationContext(), "BoardFragmentRefresh", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 3000);
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="pulltorefresh_color1">#009688</color>
+    <color name="pulltorefresh_color2">#c3f5</color>
+    <color name="pulltorefresh_color3">#2858a1</color>
+
+</resources>
