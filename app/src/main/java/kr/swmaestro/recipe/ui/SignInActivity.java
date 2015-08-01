@@ -1,8 +1,9 @@
 package kr.swmaestro.recipe.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +26,9 @@ import java.util.HashMap;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.util.SignInRequest;
-import kr.swmaestro.recipe.util.SignUpRequest;
+import android.widget.ImageView;
+
+import kr.swmaestro.recipe.helper.MakeBlurHelper;
 
 /**
  * Created by lk on 2015. 7. 31..
@@ -48,12 +51,27 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
+
+        ImageView bgImageView = (ImageView) findViewById(R.id.activity_singnin_background);
+        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 5);
+        bgImageView.setImageBitmap(blurImage);
         emailEt = (EditText) findViewById(R.id.et_signin_email);
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
         Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
         signinBt.setOnClickListener(this);
         signupBt.setOnClickListener(this);
+
+
+    }
+
+    private Bitmap getBitmapFromDrawable() {
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.test);
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            return bitmap;
+        }
+        return null;
     }
 
 
