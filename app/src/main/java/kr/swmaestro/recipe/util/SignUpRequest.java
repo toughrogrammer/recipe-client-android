@@ -39,8 +39,6 @@ public class SignUpRequest extends Request<String> {
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String parsed = null;
 
-
-
         try {
             parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
@@ -48,7 +46,6 @@ public class SignUpRequest extends Request<String> {
             e.printStackTrace();
             return Response.error(new VolleyError(e));
         }
-
     }
 
     @Override
