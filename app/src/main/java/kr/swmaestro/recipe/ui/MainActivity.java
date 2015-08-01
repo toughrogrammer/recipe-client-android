@@ -27,7 +27,7 @@ import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
 
     private SwipeRefreshLayout swipeLayout;
     private DrawerLayout drawer;
@@ -132,7 +132,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private void initSwipeRefreshLayout() {
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_container);
         swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.pulltorefresh_color1),getResources().getColor(R.color.pulltorefresh_color2),getResources().getColor(R.color.pulltorefresh_color3));
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.pulltorefresh_color1),
+                getResources().getColor(R.color.pulltorefresh_color2),
+                getResources().getColor(R.color.pulltorefresh_color3));
     }
 
     @Override

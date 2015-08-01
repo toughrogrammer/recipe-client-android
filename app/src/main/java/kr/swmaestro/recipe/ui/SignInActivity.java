@@ -112,6 +112,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         editor.commit();
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                     else
                         mTextView.setText("정상가입");
