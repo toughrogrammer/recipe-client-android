@@ -27,6 +27,7 @@ import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.util.SignInRequest;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import kr.swmaestro.recipe.helper.MakeBlurHelper;
 
@@ -100,12 +101,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             public void onResponse(String response) {
                 HashMap<String,String> map = new ErrorMap();
 
-                TextView mTextView = (TextView)findViewById(R.id.tv_signin_result);
+                //TextView mTextView = (TextView)findViewById(R.id.tv_signin_result);
 
                 try {
                     JSONObject json = new JSONObject(response);
                     if(json.has("accessToken")) {
-                        mTextView.setText((json.get("accessToken").toString()));
+                        Toast.makeText(getApplication(),"accessToken",Toast.LENGTH_LONG).show();
+                        //mTextView.setText((json.get("accessToken").toString()));
                         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("token", json.get("accessToken").toString());
@@ -115,7 +117,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         finish();
                     }
                     else
-                        mTextView.setText("정상가입");
+                        Toast.makeText(getApplication(),"정상가입",Toast.LENGTH_LONG).show();
+                        //mTextView.setText("정상가입");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
