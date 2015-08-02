@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -90,7 +91,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void Signin() {
-
+        final View coordinatorLayoutView = findViewById(R.id.snackbarPosition);
         mEmail = emailEt.getText().toString();
         mPassword = passwordEt.getText().toString();
 
@@ -117,7 +118,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         finish();
                     }
                     else
-                        Toast.makeText(getApplication(),"정상가입",Toast.LENGTH_LONG).show();
+                        Snackbar
+                                .make(coordinatorLayoutView, "아이디 또는 비밀번호가 잘못되었습니다.", Snackbar.LENGTH_LONG)
+                                .show();
                         //mTextView.setText("정상가입");
                 } catch (JSONException e) {
                     e.printStackTrace();
