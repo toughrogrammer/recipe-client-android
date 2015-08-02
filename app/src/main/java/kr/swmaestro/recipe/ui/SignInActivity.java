@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -116,6 +117,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     else
                         mTextView.setText("정상가입");
+                        Snackbar result = new Snackbar("정상가입");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
