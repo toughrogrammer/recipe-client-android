@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#873f466a">
+        android:background="#79333855">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -94,7 +94,8 @@
                         android:layout_height="wrap_content"
                         android:theme="@style/MyTextInputLayoutTextAppearance"
                         android:layout_marginLeft="40dp"
-                        android:layout_marginRight="40dp">
+                        android:layout_marginRight="40dp"
+                        android:layout_marginBottom="20dp">
 
                         <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/et_signin_password"
@@ -125,8 +126,10 @@
                 android:textAllCaps="false"
                 android:textColor="#deffffff"
                 android:textSize="24sp"
-                android:layout_marginTop="20dp"
-                android:background="@null"/>
+                android:background="@drawable/border_style"
+                android:layout_marginRight="44dp"
+                android:layout_marginLeft="44dp"
+                android:layout_marginTop="12dp"/>
 
             <Button
                 android:id="@+id/bt_signin_signup"
@@ -134,7 +137,10 @@
                 android:layout_height="wrap_content"
                 android:text="회원가입"
                 android:textColor="#deffffff"
-                android:textSize="20sp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:background="#34262626"
+                android:layout_marginBottom="4dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 

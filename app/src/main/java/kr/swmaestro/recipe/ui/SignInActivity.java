@@ -62,16 +62,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 20);
         bgImageView.setImageBitmap(blurImage);
         myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
-        myTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        myTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         foodTv = (TextView) findViewById(R.id.activity_signin_Food_tx);
-        foodTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        foodTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         emailEt = (EditText) findViewById(R.id.et_signin_email);
-        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
-        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
-        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         signinBt.setOnClickListener(this);
         signupBt.setOnClickListener(this);
 

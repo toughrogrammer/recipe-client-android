@@ -11,7 +11,7 @@
     </style>
 
     <style name="MyTextInputLayoutTextAppearance" parent="TextAppearance.AppCompat">
-        <item name="android:textColorHint">#ffffff</item>
+        <item name="android:textColorHint">#93ffffff</item>
         <item name="colorControlNormal">#ffffff</item>
         <item name="colorControlActivated">#8e17222f</item>
     </style>
