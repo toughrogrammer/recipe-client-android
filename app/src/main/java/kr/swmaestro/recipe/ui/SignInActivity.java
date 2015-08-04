@@ -3,6 +3,8 @@ package kr.swmaestro.recipe.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -42,6 +44,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     EditText emailEt;
     EditText passwordEt;
+    TextView myTv;
+    TextView foodTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +59,25 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void initView() {
 
         ImageView bgImageView = (ImageView) findViewById(R.id.activity_singnin_background);
-        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 5);
+        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 20);
         bgImageView.setImageBitmap(blurImage);
+        myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
+        myTv.setTextColor(Color.WHITE);
+        myTv.setTypeface(Typeface.createFromAsset(getAssets(), "cre_heart.ttf"));
+        foodTv = (TextView) findViewById(R.id.activity_signin_Food_tx);
+        foodTv.setTextColor(Color.WHITE);
+        foodTv.setTypeface(Typeface.createFromAsset(getAssets(), "cre_heart.ttf"));
         emailEt = (EditText) findViewById(R.id.et_signin_email);
+        emailEt.setHintTextColor(Color.WHITE);
+        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "Daum_Regular.ttf"));
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
+        passwordEt.setHintTextColor(Color.WHITE);
+        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "Daum_Regular.ttf"));
         Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
+       // signinBt.setTypeface(Typeface.createFromAsset(getAssets(), "ahronbd.ttf"));
+        signupBt.setTextColor(Color.WHITE);
+        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "Daum_Regular.ttf"));
         signinBt.setOnClickListener(this);
         signupBt.setOnClickListener(this);
 
@@ -68,7 +85,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private Bitmap getBitmapFromDrawable() {
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.test);
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.test2);
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
             return bitmap;

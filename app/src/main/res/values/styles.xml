@@ -5,9 +5,9 @@
         <!-- Customize your theme here. -->
     <style name="Base.Theme.SupportDesign" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#00BCD4</item>
-        <item name="colorPrimaryDark">#0097A7</item>
-        <item name="colorAccent">#FFFF00</item>
+        <item name="colorPrimary">#ff000000</item>
+        <item name="colorPrimaryDark">#ff000000</item>
+        <item name="colorAccent">#fffff0f4</item>
     </style>
 
 </resources>
