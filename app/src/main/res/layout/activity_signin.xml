@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
@@ -8,26 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/test2"/>
+        android:src="@drawable/background" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#873f466a">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
-            android:background="#7bdd0901">
+            android:layout_weight="5">
 
             <TextView
                 android:id="@+id/activity_signin_Food_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Food"
-                android:textSize="180dp"
-                android:layout_marginTop="36dp"
+                android:textColor="#ffffffff"
+                android:textSize="100sp"
+                android:layout_marginBottom="24dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold"/>
@@ -35,10 +38,11 @@
                 android:id="@+id/activity_signin_my_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="my"
-                android:textSize="130dp"
-                android:layout_marginLeft="36dp"
-                android:layout_marginTop="0dp"
+                android:text="My"
+                android:textColor="#ffffffff"
+                android:textSize="45sp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="60dp"
                 android:textStyle="bold"/>
         </RelativeLayout>
 
@@ -46,51 +50,63 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:orientation="horizontal"
-            android:background="#605c9013">
+            android:orientation="horizontal">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp">
-                    <EditText
-                        android:id="@+id/et_signin_email"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint=" 아이디"
-                        android:textSize="25sp"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginTop="20dp" />
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyTextInputLayoutTextAppearance"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/et_signin_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="18sp"
+                            android:focusable="false"
+                            android:textStyle="bold"
+                            android:hint=" E-mail" />
+
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="20dp">
-                    <EditText
-                        android:id="@+id/et_signin_password"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:hint=" 패스워드"
-                        android:textSize="25sp"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyTextInputLayoutTextAppearance"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/et_signin_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint=" Password"
+                            android:textStyle="bold"
+                            android:focusable="false"
+                            android:textSize="18sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -105,10 +121,10 @@
                 android:id="@+id/bt_signin_signin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign In"
+                android:text="Login"
                 android:textAllCaps="false"
-                android:textColor="#ffff3372"
-                android:textSize="27sp"
+                android:textColor="#deffffff"
+                android:textSize="24sp"
                 android:layout_marginTop="20dp"
                 android:background="@null"/>
 
@@ -117,12 +133,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="회원가입"
+                android:textColor="#deffffff"
                 android:textSize="20sp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
-
 
     </LinearLayout>
     <android.support.design.widget.CoordinatorLayout

@@ -62,22 +62,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 20);
         bgImageView.setImageBitmap(blurImage);
         myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
-        myTv.setTextColor(Color.WHITE);
-        myTv.setTypeface(Typeface.createFromAsset(getAssets(), "cre_heart.ttf"));
+        myTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
         foodTv = (TextView) findViewById(R.id.activity_signin_Food_tx);
-        foodTv.setTextColor(Color.WHITE);
-        foodTv.setTypeface(Typeface.createFromAsset(getAssets(), "cre_heart.ttf"));
+        foodTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
         emailEt = (EditText) findViewById(R.id.et_signin_email);
-        emailEt.setHintTextColor(Color.WHITE);
-        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "Daum_Regular.ttf"));
+        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
-        passwordEt.setHintTextColor(Color.WHITE);
-        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "Daum_Regular.ttf"));
+        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
         Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
-       // signinBt.setTypeface(Typeface.createFromAsset(getAssets(), "ahronbd.ttf"));
-        signupBt.setTextColor(Color.WHITE);
-        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "Daum_Regular.ttf"));
+        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
         signinBt.setOnClickListener(this);
         signupBt.setOnClickListener(this);
 
@@ -85,7 +79,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private Bitmap getBitmapFromDrawable() {
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.test2);
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.background);
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
             return bitmap;
