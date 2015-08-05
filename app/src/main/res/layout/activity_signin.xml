@@ -68,6 +68,8 @@
                         android:layout_height="wrap_content"
                         android:theme="@style/MyTextInputLayoutTextAppearance"
                         android:layout_marginLeft="40dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:layout_marginRight="40dp">
 
                         <android.support.v7.widget.AppCompatEditText
@@ -75,7 +77,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textSize="18sp"
-                            android:focusable="false"
                             android:textStyle="bold"
                             android:hint=" E-mail" />
 
@@ -94,6 +95,8 @@
                         android:layout_height="wrap_content"
                         android:theme="@style/MyTextInputLayoutTextAppearance"
                         android:layout_marginLeft="40dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:layout_marginRight="40dp"
                         android:layout_marginBottom="20dp">
 
@@ -103,7 +106,6 @@
                             android:layout_height="match_parent"
                             android:hint=" Password"
                             android:textStyle="bold"
-                            android:focusable="false"
                             android:textSize="18sp" />
 
                     </android.support.design.widget.TextInputLayout>
