@@ -3,6 +3,8 @@ package kr.swmaestro.recipe.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -42,6 +44,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     EditText emailEt;
     EditText passwordEt;
+    TextView myTv;
+    TextView foodTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +59,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void initView() {
 
         ImageView bgImageView = (ImageView) findViewById(R.id.activity_singnin_background);
-        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 5);
+        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 20);
         bgImageView.setImageBitmap(blurImage);
+        myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
+        myTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        foodTv = (TextView) findViewById(R.id.activity_signin_Food_tx);
+        foodTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         emailEt = (EditText) findViewById(R.id.et_signin_email);
+        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
+        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
+        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         signinBt.setOnClickListener(this);
         signupBt.setOnClickListener(this);
 
@@ -68,7 +79,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private Bitmap getBitmapFromDrawable() {
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.test);
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.background);
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
             return bitmap;

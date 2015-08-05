@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         ActionBar ab = getSupportActionBar();
         if (null != ab) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setHomeAsUpIndicator(R.drawable.test2);
             ab.setDisplayHomeAsUpEnabled(true);
         }
     }
