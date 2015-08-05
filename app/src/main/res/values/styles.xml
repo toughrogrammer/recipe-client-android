@@ -6,7 +6,7 @@
     <style name="Base.Theme.SupportDesign" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">#ffffff</item>
+        <item name="colorPrimaryDark">#9E9E9E</item>
         <item name="colorAccent">#ffffff</item>
     </style>
 
@@ -16,9 +16,9 @@
         <item name="colorControlActivated">#8e17222f</item>
     </style>
 
-    <style name="test" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">#ffffff</item>
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#F44336</item>
+        <item name="colorPrimaryDark">#D32F2F</item>
         <item name="colorAccent">#ffffff</item>
 
     </style>

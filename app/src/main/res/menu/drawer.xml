@@ -13,7 +13,7 @@
                 android:title="레시피등록" />
             <item
                 android:icon="@drawable/red_circle"
-                android:id="+@id/nav_setTaste"
+                android:id="@+id/nav_setTaste"
                 android:title="식감설정" />
         </menu>
     </item>

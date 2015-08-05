@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         ActionBar ab = getSupportActionBar();
         if (null != ab) {
-            ab.setHomeAsUpIndicator(R.drawable.test2);
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
             ab.setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -93,10 +93,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         ListView listView = (ListView) findViewById(R.id.activity_main_listview);
 
-//        String[] items = new String[20];
-//        for (int i = 0; i < items.length; i++) {
-//            items[i] = "Item " + (i + 1);
-//        }
         listView.setAdapter(mAdapter);
 
         progressDialog = new ProgressDialog(this);
