@@ -2,11 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_1"
-            android:title="1" />
-        <item
-            android:id="@+id/nav_2"
-            android:title="2" />
+            android:id="@+id/nav_memberInfo"
+            android:title="회원정보" />
     </group>
+    <item android:title="요리 메뉴">
+        <menu>
+            <item
+                android:icon="@drawable/ic_remove_red_eye_white_24dp"
+                android:id="@+id/nav_uploadRecipe"
+                android:title="레시피등록" />
+            <item
+                android:icon="@drawable/red_circle"
+                android:id="@+id/nav_setTaste"
+                android:title="식감설정" />
+        </menu>
+    </item>
 
 </menu>

@@ -3,8 +3,11 @@ package kr.swmaestro.recipe.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +30,7 @@ import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.util.SignInRequest;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import kr.swmaestro.recipe.helper.MakeBlurHelper;
 
@@ -40,6 +44,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     EditText emailEt;
     EditText passwordEt;
+    TextView myTv;
+    TextView foodTv;
+    Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +60,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void initView() {
 
         ImageView bgImageView = (ImageView) findViewById(R.id.activity_singnin_background);
-        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 5);
+        Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 1);
         bgImageView.setImageBitmap(blurImage);
+
+        tf = Typeface.createFromAsset(getAssets(),"Nanumbut.ttf");
+        myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
+        myTv.setTypeface(tf,Typeface.BOLD);
+
+        foodTv = (TextView) findViewById(R.id.activity_signin_Food_tx);
+        foodTv.setTypeface(tf,Typeface.BOLD);
+
         emailEt = (EditText) findViewById(R.id.et_signin_email);
+        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
+        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+
         Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
+
+        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         signinBt.setOnClickListener(this);
         signupBt.setOnClickListener(this);
 
@@ -66,7 +87,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private Bitmap getBitmapFromDrawable() {
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.test);
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.background);
         if (drawable != null) {
             Bitmap bitmap = drawable.getBitmap();
             return bitmap;
@@ -89,7 +110,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void Signin() {
-
+        final View coordinatorLayoutView = findViewById(R.id.snackbarPosition);
         mEmail = emailEt.getText().toString();
         mPassword = passwordEt.getText().toString();
 
@@ -100,12 +121,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             public void onResponse(String response) {
                 HashMap<String,String> map = new ErrorMap();
 
-                TextView mTextView = (TextView)findViewById(R.id.tv_signin_result);
+                //TextView mTextView = (TextView)findViewById(R.id.tv_signin_result);
 
                 try {
                     JSONObject json = new JSONObject(response);
                     if(json.has("accessToken")) {
-                        mTextView.setText((json.get("accessToken").toString()));
+                        Toast.makeText(getApplication(),"accessToken",Toast.LENGTH_LONG).show();
+                        //mTextView.setText((json.get("accessToken").toString()));
                         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("token", json.get("accessToken").toString());
@@ -115,7 +137,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         finish();
                     }
                     else
-                        mTextView.setText("정상가입");
+                        Snackbar
+                                .make(coordinatorLayoutView, "아이디 또는 비밀번호가 잘못되었습니다.", Snackbar.LENGTH_LONG)
+                                .show();
+                        //mTextView.setText("정상가입");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

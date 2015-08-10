@@ -1,5 +1,7 @@
 package kr.swmaestro.recipe.ui;
 
+import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -14,14 +16,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
+import kr.swmaestro.recipe.RecipeListAdapter;
+import kr.swmaestro.recipe.model.Recipe;
+import kr.swmaestro.recipe.util.RecipeRequest;
 import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 
@@ -31,9 +43,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private SwipeRefreshLayout swipeLayout;
     private DrawerLayout drawer;
-
-    private ArrayAdapter<String> mAdapter;
-    private ArrayList<String> mBlackList = new ArrayList<String>();
+    private List<Recipe> list = new ArrayList<>();
+    private RecipeListAdapter mAdapter = new RecipeListAdapter(this, list);
+    private ArrayList<Recipe> mBlackList = new ArrayList<Recipe>();
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         initNavtigationView();
         initListView();
         initSwipeRefreshLayout();
+
     }
 
     private void initToolbar() {
@@ -79,21 +93,47 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         ListView listView = (ListView) findViewById(R.id.activity_main_listview);
 
-        // Set up ListView example
-        /*
-         * Todo Make a example data, We should make data from Model class
-         */
-        String[] items = new String[20];
-        for (int i = 0; i < items.length; i++) {
-            items[i] = "Item " + (i + 1);
-        }
-
-        mAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new ArrayList<String>(Arrays.asList(items)));
-
         listView.setAdapter(mAdapter);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("로딩중....");
+        progressDialog.show();
+
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        String token = pref.getString("token", "NON");  // get Token
+        RecipeRequest recipeRequest = new RecipeRequest(token, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                hideprograssDialog();
+
+                Log.i("Test", response.length()+"");
+                for(int i=0; i< response.length(); i++){
+                    try {
+                        String imgurl = "";
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        if(jsonObject.has("thumbnail")){
+                            JSONObject imginfo = jsonObject.getJSONObject("thumbnail");
+                            imgurl = imginfo.getString("reference");
+                        }
+                        Recipe recipe = new Recipe(jsonObject.getString("title"), null, imgurl);
+
+                        list.add(recipe);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                mAdapter.notifyDataSetChanged();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("volley", error.toString());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(recipeRequest);
 
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
@@ -107,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    mBlackList.add(mAdapter.getItem(position));
+                                    mBlackList.add((Recipe) mAdapter.getItem(position));
                                     mAdapter.remove(mAdapter.getItem(position));
                                 }
                                 mAdapter.notifyDataSetChanged();
@@ -168,5 +208,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 swipeLayout.setRefreshing(false);
             }
         }, 3000);
+    }
+
+    private void hideprograssDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 }
