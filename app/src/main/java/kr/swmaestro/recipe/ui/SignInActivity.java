@@ -110,7 +110,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void Signin() {
-        final View coordinatorLayoutView = findViewById(R.id.snackbarPosition);
+        final View coordinatorLayoutView = findViewById(R.id.sb_signin_snackbarposition);
         mEmail = emailEt.getText().toString();
         mPassword = passwordEt.getText().toString();
 

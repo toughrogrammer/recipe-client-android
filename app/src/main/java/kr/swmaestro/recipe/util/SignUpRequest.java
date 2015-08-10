@@ -20,13 +20,14 @@ public class SignUpRequest extends Request<String> {
     private Response.Listener<String> listener;
 
 
-    public SignUpRequest(String username, String email, String password, Response.Listener<String> successListener, Response.ErrorListener errorListener) {
+    public SignUpRequest(String username, String email, String password, String nickname, Response.Listener<String> successListener, Response.ErrorListener errorListener) {
         super(Method.POST, "http://recipe-main.herokuapp.com/auth/local/register", errorListener);
 
         mParams = new HashMap<String, String>();
         mParams.put("username", username);
         mParams.put("email", email);
         mParams.put("password", password);
+        mParams.put("nickname", nickname);
         mParams.put("device","android");
         //mParams.put("gender", gender);
 
