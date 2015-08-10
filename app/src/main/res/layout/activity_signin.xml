@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#79333855">
+        android:background="@null">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,21 +29,19 @@
                 android:layout_height="wrap_content"
                 android:text="Food"
                 android:textColor="#ffffffff"
-                android:textSize="100sp"
+                android:textSize="160sp"
                 android:layout_marginBottom="24dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:textStyle="bold"/>
+                android:layout_marginTop="112dp"
+                android:layout_centerHorizontal="true"/>
             <TextView
                 android:id="@+id/activity_signin_my_tx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My"
                 android:textColor="#ffffffff"
-                android:textSize="45sp"
+                android:textSize="75sp"
                 android:layout_marginLeft="60dp"
-                android:layout_marginTop="60dp"
-                android:textStyle="bold"/>
+                android:layout_marginTop="56dp"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -77,6 +75,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textSize="18sp"
+                            android:textColor="#ffffff"
                             android:textStyle="bold"
                             android:hint=" E-mail" />
 
@@ -105,6 +104,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:hint=" Password"
+                            android:password="true"
+                            android:textColor="#ffffff"
                             android:textStyle="bold"
                             android:textSize="18sp" />
 
@@ -137,13 +138,12 @@
                 android:id="@+id/bt_signin_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="회원가입"
-                android:textColor="#deffffff"
-                android:textSize="15sp"
+                android:text="아직 회원이 아니신가요?"
+                android:textColor="#e1e4e604"
+                android:textSize="17sp"
                 android:textStyle="bold"
-                android:background="#34262626"
-                android:layout_marginBottom="4dp"
-                android:layout_alignParentBottom="true"
+                android:background="@null"
+                android:layout_marginTop="70dp"
                 android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
