@@ -83,8 +83,8 @@ public class SignUpActivity extends AppCompatActivity {
                             try {
                                 JSONObject json = new JSONObject(response);
                                 if (json.has("error")) {
-                                    Log.e("SignupError", map.get(json.get("error")));
-                                    Snackbar.make(coordinatorLayoutView, map.get(json.get("error").toString()), Snackbar.LENGTH_LONG).show();
+                                    Log.e("SignupError", json.get("error").toString());
+                                    Snackbar.make(coordinatorLayoutView, json.get("error").toString(), Snackbar.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT);
                                     finish();

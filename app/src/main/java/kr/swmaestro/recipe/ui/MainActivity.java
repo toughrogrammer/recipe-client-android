@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
@@ -33,7 +34,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecipeListAdapter;
 import kr.swmaestro.recipe.model.Recipe;
-import kr.swmaestro.recipe.util.RecipeRequest;
+import kr.swmaestro.recipe.util.JsonRequestToken;
 import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 
@@ -101,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-        RecipeRequest recipeRequest = new RecipeRequest(token, new Response.Listener<JSONArray>() {
+        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=1000"
+                ,token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
