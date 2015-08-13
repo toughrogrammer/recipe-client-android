@@ -17,10 +17,10 @@
     </style>
 
     <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#F44336</item>
-        <item name="colorPrimaryDark">#D32F2F</item>
-        <item name="colorAccent">#ffffff</item>
-
+        <item name="colorPrimary">#fffdd835</item>
+        <item name="colorPrimaryDark">#ff000000</item>
+        <item name="colorAccent">#E91E63</item>
     </style>
+
 
 </resources>
