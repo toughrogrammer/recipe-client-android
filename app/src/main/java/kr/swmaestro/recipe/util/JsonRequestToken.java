@@ -20,13 +20,13 @@ import java.util.Map;
 /**
  * Created by lk on 2015. 8. 2..
  */
-public class RecipeRequest extends Request<JSONArray>{
+public class JsonRequestToken extends Request<JSONArray>{
 
     private String token;
     private Response.Listener<JSONArray> listener;
 
-    public RecipeRequest(String token,Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
-        super(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes", errorListener);
+    public JsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+        super(model, url, errorListener);
         this.token = token;
         listener = successListener;
     }
