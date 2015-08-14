@@ -11,12 +11,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.util.JsonRequestToken;
+import kr.swmaestro.recipe.util.JsonArrayRequest;
+import kr.swmaestro.recipe.util.JsonObjectRequest;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -35,12 +35,13 @@ public class RecipeActivity extends AppCompatActivity{
     //title
     //id
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin);
+        setContentView(R.layout.activity_receipe);
         loadrecipe();
-
+        loadmethods();
 
     }
 
@@ -50,26 +51,35 @@ public class RecipeActivity extends AppCompatActivity{
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-        JsonRequestToken recipeRequest = JsonRequestToken.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id
+        JsonObjectRequest recipeRequest = new JsonObjectRequest(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id
+                , token, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.i("test",response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("volley", error.toString());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(recipeRequest);
+    }
+
+    private void loadmethods() {
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("id");
+
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        String token = pref.getString("token", "NON");  // get Token
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id+"/methods"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.i("Test", response.length() + "");
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        String imgurl = "";
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        if (jsonObject.has("thumbnail")) {
-                            JSONObject imginfo = jsonObject.getJSONObject("thumbnail");
-                            imgurl = imginfo.getString("reference");
-                        }
-                        Log.i("recipeActivity", response.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                }
-
+                Log.i("test",response.toString());
             }
         }, new Response.ErrorListener() {
             @Override

@@ -35,7 +35,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecipeListAdapter;
 import kr.swmaestro.recipe.model.Recipe;
-import kr.swmaestro.recipe.util.JsonRequestToken;
+import kr.swmaestro.recipe.util.JsonArrayRequest;
 import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-        JsonRequestToken recipeRequest = JsonRequestToken.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes?limit=30"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes?limit=3"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

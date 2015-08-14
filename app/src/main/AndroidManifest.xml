@@ -26,6 +26,7 @@
         <activity android:name=".ui.SignUpActivity"/>
         <activity android:name=".ui.SignInActivity">
         </activity>
+        <activity android:name=".ui.RecipeActivity"/>
     </application>
 
 </manifest>
