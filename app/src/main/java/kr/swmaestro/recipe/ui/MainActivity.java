@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         TextView mEmailTv;
         TextView mNickTv;
         final NavigationView mNavigationView;
-        Menu mMenu;
+        final Menu mMenu;
 
         mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
         mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
@@ -117,13 +117,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             public void onDraw() {
                 mNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(new ListView(getApplicationContext()));
                 for( int i = 0; i < 6; i++ ){
-                    final String id = "menuItem" + ( i+1 );
+                    String id = "menuItem" + ( i+1 );
+                    MenuItem item = mMenu.findItem(getResources().getIdentifier(id,"id",getPackageName()));
+                    mNavigationView.findViewsWithText(mMenuItems, item.getTitle(),View.FIND_VIEWS_WITH_TEXT);
+                }
+                for(final View menuItem : mMenuItems){
+                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
                 }
             }
         });
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -172,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         Nickname = pref.getString("Nickname","Test");  // get Nickname
         //
         String token = pref.getString("token", "NON");  // get Token
-        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=1000"
+        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=5"
                 ,token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
