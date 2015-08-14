@@ -25,10 +25,14 @@ public class JsonRequestToken extends Request<JSONArray>{
     private String token;
     private Response.Listener<JSONArray> listener;
 
-    public JsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+    private JsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
         super(model, url, errorListener);
         this.token = token;
         listener = successListener;
+    }
+
+    public static JsonRequestToken createJsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+        return new JsonRequestToken(model, url, token, successListener, errorListener);
     }
 
     @Override

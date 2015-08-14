@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
@@ -18,8 +17,6 @@ import org.json.JSONObject;
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.util.AuthUserRquest;
-import kr.swmaestro.recipe.util.JsonRequestToken;
-import kr.swmaestro.recipe.util.util;
 
 /**
  * Created by lk on 2015. 7. 31..
