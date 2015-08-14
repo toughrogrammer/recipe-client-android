@@ -59,4 +59,4 @@ tmp/
 *.swp
 *~.nib
 .settings/
-.loadpath
+.loadpath/captures

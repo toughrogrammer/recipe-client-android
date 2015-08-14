@@ -1,32 +1,22 @@
 package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.internal.NavigationMenuView;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -48,7 +38,6 @@ import kr.swmaestro.recipe.util.JsonRequestToken;
 import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 
-
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private final String TAG = "MainActivity";
@@ -59,20 +48,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private RecipeListAdapter mAdapter = new RecipeListAdapter(this, list);
     private ArrayList<Recipe> mBlackList = new ArrayList<Recipe>();
     private ProgressDialog progressDialog;
-    private String Email;
-    private String Nickname;
-    private ArrayList<View> mMenuItems = new ArrayList<>(6);
-
-    Toolbar toolbar;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    ActionBarDrawerToggle drawerToggle;
-    CoordinatorLayout rootLayout;
-    FloatingActionButton fabBtn;
-    TextView mEmailTv;
-    TextView mNickTv;
-    NavigationView mNavigationView;
-    Menu mMenu;
-    Menu mMenu2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
 
         initToolbar();
-        initListView();
         initNavtigationView();
+        initListView();
         initSwipeRefreshLayout();
 
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar ab = getSupportActionBar();
@@ -98,48 +73,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void initNavtigationView() {
-
-        mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
-        mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
-        mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
-        mMenu = mNavigationView.getMenu();
-
-        mEmailTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
-        mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
-
-        mEmailTv.setText(Email);
-        mNickTv.setText(Nickname);
-
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
-        drawer.setDrawerListener(drawerToggle);
-
-        // Install an OnGlobalLayoutListener and wait for the NavigationMenu to fully initialize
-        mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                for (int i = 0, length = 6; i < length; i++) {
-                    final String id = "menuItem" + (i + 1);
-                    final MenuItem item = mMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
-                    mNavigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
-                }
-                for (final View menuItem : mMenuItems) {
-                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"), Typeface.BOLD);
-                }
-            }
-        });
-
-
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
-        collapsingToolbarLayout.setTitle("추천요리");
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        NavigationView nv = (NavigationView) findViewById(R.id.activity_main_navigation_view);
+        NavigationView nv = (NavigationView) findViewById(R.id.navigation_view);
         nv.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -155,18 +90,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 });
     }
 
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
     private void initListView() {
 
         ListView listView = (ListView) findViewById(R.id.activity_main_listview);
@@ -178,10 +101,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         progressDialog.show();
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        //SignInActivity 수정 후 받아올 수 있음.
-        Email = pref.getString("Email","test@gmail.com");  // get Email
-        Nickname = pref.getString("Nickname","Test");  // get Nickname
-        //
         String token = pref.getString("token", "NON");  // get Token
         JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30"
                 ,token, new Response.Listener<JSONArray>() {
