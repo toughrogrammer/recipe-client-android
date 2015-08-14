@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     TextView mNickTv;
     NavigationView mNavigationView;
     Menu mMenu;
-    Menu mMenu2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
 
         initToolbar();
-        initListView();
         initNavtigationView();
-        initSwipeRefreshLayout();
+        initListView();
+       // initSwipeRefreshLayout();
 
     }
 
@@ -252,13 +251,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     }
 
-    private void initSwipeRefreshLayout() {
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.pulltorefresh_color1),
-                getResources().getColor(R.color.pulltorefresh_color2),
-                getResources().getColor(R.color.pulltorefresh_color3));
-    }
+//    private void initSwipeRefreshLayout() {
+//        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_container);
+//        swipeLayout.setOnRefreshListener(this);
+//        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.pulltorefresh_color1),
+//                getResources().getColor(R.color.pulltorefresh_color2),
+//                getResources().getColor(R.color.pulltorefresh_color3));
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
