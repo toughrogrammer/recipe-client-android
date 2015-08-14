@@ -23,8 +23,8 @@ public class AuthUserRquest extends Request<JSONObject> {
     private String token;
     private Response.Listener<JSONObject> listener;
 
-    public AuthUserRquest(int model, String url, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
-        super(model, url, errorListener);
+    public AuthUserRquest(String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        super(Request.Method.POST, util.tokenurl, errorListener);
         this.token = token;
         listener = successListener;
     }
