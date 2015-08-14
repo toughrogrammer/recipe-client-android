@@ -4,29 +4,29 @@
     tools:context=".NavigationViewActivity">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_memberInfo"
+            android:id="@+id/menuItem1"
             android:title="회원정보" />
         <item
-            android:id="@+id/nav_memberInfo_Correct"
+            android:id="@+id/menuItem2"
             android:title="회원정보 수정" />
     </group>
     <item android:title="요리 메뉴">
         <menu>
             <item
                 android:icon="@drawable/ic_star_black_24dp"
-                android:id="@+id/nav_uploadRecipe"
+                android:id="@+id/menuItem3"
                 android:title="레시피 등록" />
             <item
                 android:icon="@drawable/ic_done_black_24dp"
-                android:id="@+id/nav_setTaste"
+                android:id="@+id/menuItem4"
                 android:title="식감선택"/>
             <item
                 android:icon="@drawable/ic_filter_none_black_24dp"
-                android:id="@+id/nav_setFilter"
+                android:id="@+id/menuItem5"
                 android:title="필터"/>
             <item
                 android:icon="@mipmap/ic_settings_black_24dp"
-                android:id="@+id/nav_setSeting"
+                android:id="@+id/menuItem6"
                 android:title="앱설정"/>
         </menu>
     </item>

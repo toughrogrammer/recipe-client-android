@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -67,6 +68,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     ActionBarDrawerToggle drawerToggle;
     CoordinatorLayout rootLayout;
     FloatingActionButton fabBtn;
+    TextView mEmailTv;
+    TextView mNickTv;
+    NavigationView mNavigationView;
+    Menu mMenu;
+    Menu mMenu2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +98,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void initNavtigationView() {
-        TextView mEmailTv;
-        TextView mNickTv;
-        final NavigationView mNavigationView;
-        final Menu mMenu;
 
         mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
         mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
@@ -112,20 +114,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
         drawer.setDrawerListener(drawerToggle);
 
-        mNavigationView.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
+        // Install an OnGlobalLayoutListener and wait for the NavigationMenu to fully initialize
+        mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onDraw() {
-                mNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(new ListView(getApplicationContext()));
-                for( int i = 0; i < 6; i++ ){
-                    String id = "menuItem" + ( i+1 );
-                    MenuItem item = mMenu.findItem(getResources().getIdentifier(id,"id",getPackageName()));
-                    mNavigationView.findViewsWithText(mMenuItems, item.getTitle(),View.FIND_VIEWS_WITH_TEXT);
+            public void onGlobalLayout() {
+                mNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                for (int i = 0, length = 6; i < length; i++) {
+                    final String id = "menuItem" + (i + 1);
+                    final MenuItem item = mMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                    mNavigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
                 }
-                for(final View menuItem : mMenuItems){
-                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+                for (final View menuItem : mMenuItems) {
+                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"), Typeface.BOLD);
                 }
             }
         });
+
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
@@ -178,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         Nickname = pref.getString("Nickname","Test");  // get Nickname
         //
         String token = pref.getString("token", "NON");  // get Token
-        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=5"
+        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30"
                 ,token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
