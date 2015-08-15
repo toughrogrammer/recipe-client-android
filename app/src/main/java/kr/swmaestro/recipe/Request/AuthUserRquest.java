@@ -1,4 +1,4 @@
-package kr.swmaestro.recipe.util;
+package kr.swmaestro.recipe.Request;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -7,7 +7,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,16 +14,18 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.swmaestro.recipe.util.util;
+
 /**
- * Created by lk on 2015. 8. 2..
+ * Created by lk on 2015. 8. 13..
  */
-public class JsonObjectRequest extends Request<JSONObject>{
+public class AuthUserRquest extends Request<JSONObject> {
 
     private String token;
     private Response.Listener<JSONObject> listener;
 
-    public JsonObjectRequest(int model, String url, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
-        super(model, url, errorListener);
+    public AuthUserRquest(String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        super(Request.Method.POST, util.tokenurl, errorListener);
         this.token = token;
         listener = successListener;
     }
@@ -34,7 +35,6 @@ public class JsonObjectRequest extends Request<JSONObject>{
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
-
             return Response.success(new JSONObject(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {

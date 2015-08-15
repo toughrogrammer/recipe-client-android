@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.util.SignUpRequest;
+import kr.swmaestro.recipe.Request.SignUpRequest;
 
 /**
  * Created by lk on 2015. 7. 27..

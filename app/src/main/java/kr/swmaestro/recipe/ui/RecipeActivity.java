@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.util.JsonArrayRequest;
-import kr.swmaestro.recipe.util.JsonObjectRequest;
+import kr.swmaestro.recipe.Request.JsonArrayRequest;
+import kr.swmaestro.recipe.Request.JsonObjectRequest;
 
 /**
  * Created by lk on 2015. 8. 15..

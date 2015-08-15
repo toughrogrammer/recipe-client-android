@@ -2,19 +2,19 @@ package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-<<<<<<< HEAD
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-=======
->>>>>>> c5dee830c8363b681489df322c77da26f49eb8cf
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,8 +24,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.view.ViewTreeObserver;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,13 +43,8 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecycleAdapter;
 import kr.swmaestro.recipe.model.Recipe;
-<<<<<<< HEAD
-import kr.swmaestro.recipe.util.JsonRequestToken;
-=======
-import kr.swmaestro.recipe.util.JsonArrayRequest;
-import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
+import kr.swmaestro.recipe.Request.JsonArrayRequest;
 
->>>>>>> c5dee830c8363b681489df322c77da26f49eb8cf
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private RecycleAdapter mAdapter = new RecycleAdapter(list);
     private ArrayList<Recipe> mBlackList = new ArrayList<Recipe>();
     private ProgressDialog progressDialog;
-<<<<<<< HEAD
     private String Email;
     private String Nickname;
     private ArrayList<View> mMenuItems = new ArrayList<>(6);
@@ -79,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private LinearLayoutManager mLinearLayoutManager;
     private GridLayoutManager mGridLayoutManager;
     private RecyclerView mRecyclerView;
-=======
->>>>>>> c5dee830c8363b681489df322c77da26f49eb8cf
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,18 +82,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         initToolbar();
         initNavtigationView();
         initListView();
-<<<<<<< HEAD
-       // initSwipeRefreshLayout();
+        // initSwipeRefreshLayout();
 
 
-=======
-        initSwipeRefreshLayout();
->>>>>>> c5dee830c8363b681489df322c77da26f49eb8cf
 
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar ab = getSupportActionBar();
@@ -112,8 +100,53 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void initNavtigationView() {
+
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        Email = pref.getString("email","test@gmail.com");  // get Email
+        Nickname = pref.getString("nickname","Test");  // get Nickname
+
+
+        mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
+        mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
+        mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
+        mMenu = mNavigationView.getMenu();
+
+        mEmailTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+
+        mEmailTv.setText(Email);
+        mNickTv.setText(Nickname);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        NavigationView nv = (NavigationView) findViewById(R.id.navigation_view);
+        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
+        drawer.setDrawerListener(drawerToggle);
+
+        // Install an OnGlobalLayoutListener and wait for the NavigationMenu to fully initialize
+        mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                for (int i = 0, length = 6; i < length; i++) {
+                    final String id = "menuItem" + (i + 1);
+                    final MenuItem item = mMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                    mNavigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                }
+                for (final View menuItem : mMenuItems) {
+                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"), Typeface.BOLD);
+                }
+            }
+        });
+
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
+        collapsingToolbarLayout.setTitle("추천요리");
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NavigationView nv = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         nv.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -129,15 +162,20 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 });
     }
 
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
     private void initListView() {
 
-<<<<<<< HEAD
-=======
-        final ListView listView = (ListView) findViewById(R.id.activity_main_listview);
-
-        listView.setAdapter(mAdapter);
-
->>>>>>> c5dee830c8363b681489df322c77da26f49eb8cf
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("로딩중....");
         progressDialog.show();
@@ -152,23 +190,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-<<<<<<< HEAD
-        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30"
-                ,token, new Response.Listener<JSONArray>() {
-=======
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes?limit=3"
-                , token, new Response.Listener<JSONArray>() {
->>>>>>> develop
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30", token,new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
 
-                Log.i("Test", response.length() + "");
-                for (int i = 0; i < response.length(); i++) {
+                Log.i("Test", response.length()+"");
+                for(int i=0; i< response.length(); i++){
                     try {
                         String imgurl = "";
                         JSONObject jsonObject = response.getJSONObject(i);
-                        if (jsonObject.has("thumbnail")) {
+                        if(jsonObject.has("thumbnail")){
                             JSONObject imginfo = jsonObject.getJSONObject("thumbnail");
                             imgurl = imginfo.getString("reference");
                         }
@@ -196,18 +228,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         // we don't look for swipes.
         //mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
 
-<<<<<<< HEAD
-=======
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),mAdapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-                intent.putExtra("id", mAdapter.getItem(position).toString());
-                startActivity(intent);
-            }
-        });
->>>>>>> c5dee830c8363b681489df322c77da26f49eb8cf
 
 //        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

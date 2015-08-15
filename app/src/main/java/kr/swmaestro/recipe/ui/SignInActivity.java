@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
-import kr.swmaestro.recipe.util.SignInRequest;
+import kr.swmaestro.recipe.Request.SignInRequest;
 import android.widget.ImageView;
 import android.widget.Toast;
 

@@ -1,4 +1,4 @@
-package kr.swmaestro.recipe.util;
+package kr.swmaestro.recipe.Request;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -7,34 +7,33 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-import org.json.JSONArray;
-
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by lk on 2015. 8. 5..
+ * Created by lk on 2015. 7. 27..
  */
-public class RecipeUploadRequest extends Request<String>{
+public class SignUpRequest extends Request<String> {
 
     private Map<String, String> mParams;
     private Response.Listener<String> listener;
-    private String token;
 
 
-    public RecipeUploadRequest(String title, String method, String thumbnail, String token, Response.Listener<String> successListener, Response.ErrorListener errorListener) {
-        super(Request.Method.POST, "http://recipe-main.herokuapp.com/recipes", errorListener);
+    public SignUpRequest(String username, String email, String password, String nickname, Response.Listener<String> successListener, Response.ErrorListener errorListener) {
+        super(Method.POST, "http://recipe-main.herokuapp.com/auth/local/register", errorListener);
 
         mParams = new HashMap<String, String>();
-        mParams.put("title", title);
-        mParams.put("method", method);
-        mParams.put("thumbnail", thumbnail);
-        //mParams.put("taste", gender);
-
-        this.token = token;
+        mParams.put("username", username);
+        mParams.put("email", email);
+        mParams.put("password", password);
+        mParams.put("nickname", nickname);
+        mParams.put("device","android");
+        //mParams.put("gender", gender);
 
         listener = successListener;
+
+
     }
 
     @Override
@@ -48,12 +47,6 @@ public class RecipeUploadRequest extends Request<String>{
             e.printStackTrace();
             return Response.error(new VolleyError(e));
         }
-    }
-
-    public Map getHeaders() throws AuthFailureError {
-        Map params = new HashMap();
-        params.put("Authorization", "Bearer " + token);
-        return params;
     }
 
     @Override

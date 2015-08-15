@@ -12,11 +12,12 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.util.AuthUserRquest;
+import kr.swmaestro.recipe.Request.AuthUserRquest;
 
 /**
  * Created by lk on 2015. 7. 31..
@@ -51,11 +52,19 @@ public class IntroActivity extends AppCompatActivity{
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-                String token = pref.getString("token", "NON");          //Get token when it is saved
+                final SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                final String token = pref.getString("token", "NON");          //Get token when it is saved
                 AuthUserRquest recipeRequest = new AuthUserRquest(token, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {       //Accpet Request is pass token check
+                        SharedPreferences.Editor editor = pref.edit();
+                        try {
+                            editor.putString("nickname", response.get("nickname").toString());
+                            editor.putString("email", response.get("email").toString());
+                            editor.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         Intent intent = new Intent(IntroActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

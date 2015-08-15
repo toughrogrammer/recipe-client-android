@@ -1,4 +1,4 @@
-package kr.swmaestro.recipe.util;
+package kr.swmaestro.recipe.Request;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -7,8 +7,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -17,28 +17,24 @@ import java.util.Map;
 /**
  * Created by lk on 2015. 8. 2..
  */
-public class JsonArrayRequest extends Request<JSONArray>{
+public class JsonObjectRequest extends Request<JSONObject>{
 
     private String token;
-    private Response.Listener<JSONArray> listener;
+    private Response.Listener<JSONObject> listener;
 
-    private JsonArrayRequest(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+    public JsonObjectRequest(int model, String url, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         super(model, url, errorListener);
         this.token = token;
         listener = successListener;
     }
 
-    public static JsonArrayRequest createJsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
-        return new JsonArrayRequest(model, url, token, successListener, errorListener);
-    }
-
     @Override
-    protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
-            return Response.success(new JSONArray(jsonString),
+            return Response.success(new JSONObject(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -50,7 +46,7 @@ public class JsonArrayRequest extends Request<JSONArray>{
     }
 
     @Override
-    protected void deliverResponse(JSONArray response) {
+    protected void deliverResponse(JSONObject response) {
         listener.onResponse(response);
     }
 
