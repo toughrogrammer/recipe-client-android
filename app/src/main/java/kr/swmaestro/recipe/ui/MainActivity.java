@@ -103,8 +103,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
+<<<<<<< HEAD
+        JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30"
+                ,token, new Response.Listener<JSONArray>() {
+=======
         JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes?limit=3"
                 , token, new Response.Listener<JSONArray>() {
+>>>>>>> develop
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
