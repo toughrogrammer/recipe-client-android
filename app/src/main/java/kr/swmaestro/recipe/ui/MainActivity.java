@@ -44,6 +44,7 @@ import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecycleAdapter;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
+import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
 
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private String Email;
     private String Nickname;
     private ArrayList<View> mMenuItems = new ArrayList<>(6);
+    private int count;
 
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        count = 0;
         initToolbar();
         initNavtigationView();
         initListView();
@@ -176,9 +178,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initListView() {
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("로딩중....");
-        progressDialog.show();
+        visibleprogress();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setHasFixedSize(true);
@@ -188,14 +188,46 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+        loadRecipeList();
+
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        //mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
+
+
+//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                Log.i("onLoadMore",current_page+"");
+                visibleprogress();
+                loadRecipeList();
+            }
+        });
+
+
+    }
+
+    private void visibleprogress() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("로딩중....");
+        progressDialog.show();
+    }
+
+    private void loadRecipeList() {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30", token,new Response.Listener<JSONArray>() {
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=15&skip="+count, token,new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
 
-                Log.i("Test", response.length()+"");
+                Log.i("Test", response.length() + "");
                 for(int i=0; i< response.length(); i++){
                     try {
                         String imgurl = "";
@@ -212,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     }
 
                 }
+                count+=15;
                 mAdapter.notifyDataSetChanged();
 
             }
@@ -223,20 +256,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
-
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
-        //mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
-
-
-//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
     }
 
 //    private void initSwipeRefreshLayout() {

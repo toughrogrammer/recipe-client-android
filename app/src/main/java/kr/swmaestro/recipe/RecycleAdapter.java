@@ -36,6 +36,8 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
         setItem(holder, position);
     }
 
+
+
     private void setItem(RecyclerHolder holder, int position) {
         Recipe recipe = list.get(position);
         holder.mRecycleHolder.mTitle.setText(recipe.getTitle());
