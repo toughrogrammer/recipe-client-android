@@ -1,13 +1,11 @@
 package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +16,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -42,11 +43,9 @@ import java.util.List;
 
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.RecipeListAdapter;
+import kr.swmaestro.recipe.RecycleAdapter;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.util.JsonRequestToken;
-import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
-
 
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private SwipeRefreshLayout swipeLayout;
     private DrawerLayout drawer;
     private List<Recipe> list = new ArrayList<>();
-    private RecipeListAdapter mAdapter = new RecipeListAdapter(this, list);
+    private RecycleAdapter mAdapter = new RecycleAdapter(list);
     private ArrayList<Recipe> mBlackList = new ArrayList<Recipe>();
     private ProgressDialog progressDialog;
     private String Email;
@@ -73,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     NavigationView mNavigationView;
     Menu mMenu;
 
+    private LinearLayoutManager mLinearLayoutManager;
+    private GridLayoutManager mGridLayoutManager;
+    private RecyclerView mRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         initNavtigationView();
         initListView();
        // initSwipeRefreshLayout();
+
+
 
     }
 
@@ -168,13 +173,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initListView() {
 
-        ListView listView = (ListView) findViewById(R.id.activity_main_listview);
-
-        listView.setAdapter(mAdapter);
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("로딩중....");
         progressDialog.show();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView.setHasFixedSize(true);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         //SignInActivity 수정 후 받아올 수 있음.
@@ -217,37 +226,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
 
-        SwipeDismissListViewTouchListener touchListener =
-                new SwipeDismissListViewTouchListener(
-                        listView,
-                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
-                            @Override
-                            public boolean canDismiss(int position) {
-                                return true;
-                            }
-
-                            @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    mBlackList.add((Recipe) mAdapter.getItem(position));
-                                    mAdapter.remove(mAdapter.getItem(position));
-                                }
-                                mAdapter.notifyDataSetChanged();
-                                //Toast.makeText(getApplicationContext(),mBlackList.toString(),Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, mBlackList.toString());
-                            }
-                        });
-        listView.setOnTouchListener(touchListener);
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
-        listView.setOnScrollListener(touchListener.makeScrollListener());
+        //mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
     }
 

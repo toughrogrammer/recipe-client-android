@@ -45,31 +45,13 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/list"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="ㅎㅇㅎㅇ"
-                   android:textSize="20dp"/>
-                <ListView
-                    android:id="@+id/activity_main_listview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></ListView>
-
-                <include layout="@layout/list_main_row"/>
-
-            </LinearLayout>
-
-        </android.support.v4.widget.NestedScrollView>
+        </android.support.v7.widget.RecyclerView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/activity_main_fabBtn"
