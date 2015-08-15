@@ -16,15 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by lk on 2015. 8. 13..
+ * Created by lk on 2015. 8. 2..
  */
-public class AuthUserRquest extends Request<JSONObject> {
+public class JsonObjectRequest extends Request<JSONObject>{
 
     private String token;
     private Response.Listener<JSONObject> listener;
 
-    public AuthUserRquest(String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
-        super(Request.Method.POST, util.tokenurl, errorListener);
+    public JsonObjectRequest(int model, String url, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        super(model, url, errorListener);
         this.token = token;
         listener = successListener;
     }
@@ -34,6 +34,7 @@ public class AuthUserRquest extends Request<JSONObject> {
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
+
             return Response.success(new JSONObject(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
