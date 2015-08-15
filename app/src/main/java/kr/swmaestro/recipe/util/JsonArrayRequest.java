@@ -1,7 +1,5 @@
 package kr.swmaestro.recipe.util;
 
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -11,7 +9,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -20,15 +17,19 @@ import java.util.Map;
 /**
  * Created by lk on 2015. 8. 2..
  */
-public class JsonRequestToken extends Request<JSONArray>{
+public class JsonArrayRequest extends Request<JSONArray>{
 
     private String token;
     private Response.Listener<JSONArray> listener;
 
-    public JsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+    private JsonArrayRequest(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
         super(model, url, errorListener);
         this.token = token;
         listener = successListener;
+    }
+
+    public static JsonArrayRequest createJsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+        return new JsonArrayRequest(model, url, token, successListener, errorListener);
     }
 
     @Override
@@ -36,6 +37,7 @@ public class JsonRequestToken extends Request<JSONArray>{
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
+
             return Response.success(new JSONArray(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {

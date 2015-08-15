@@ -1,6 +1,7 @@
 package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +35,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecipeListAdapter;
 import kr.swmaestro.recipe.model.Recipe;
-import kr.swmaestro.recipe.util.JsonRequestToken;
+import kr.swmaestro.recipe.util.JsonArrayRequest;
 import kr.swmaestro.recipe.util.SwipeDismissListViewTouchListener;
 
 
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initListView() {
 
-        ListView listView = (ListView) findViewById(R.id.activity_main_listview);
+        final ListView listView = (ListView) findViewById(R.id.activity_main_listview);
 
         listView.setAdapter(mAdapter);
 
@@ -102,22 +103,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
+<<<<<<< HEAD
         JsonRequestToken recipeRequest = new JsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=30"
                 ,token, new Response.Listener<JSONArray>() {
+=======
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes?limit=3"
+                , token, new Response.Listener<JSONArray>() {
+>>>>>>> develop
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
 
-                Log.i("Test", response.length()+"");
-                for(int i=0; i< response.length(); i++){
+                Log.i("Test", response.length() + "");
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         String imgurl = "";
                         JSONObject jsonObject = response.getJSONObject(i);
-                        if(jsonObject.has("thumbnail")){
+                        if (jsonObject.has("thumbnail")) {
                             JSONObject imginfo = jsonObject.getJSONObject("thumbnail");
                             imgurl = imginfo.getString("reference");
                         }
-                        Recipe recipe = new Recipe(jsonObject.getString("title"), null, imgurl);
+                        Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgurl);
 
                         list.add(recipe);
                     } catch (JSONException e) {
@@ -165,7 +171,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),mAdapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+                intent.putExtra("id", mAdapter.getItem(position).toString());
+                startActivity(intent);
             }
         });
 
