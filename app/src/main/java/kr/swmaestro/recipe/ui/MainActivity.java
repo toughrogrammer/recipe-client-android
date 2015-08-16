@@ -47,15 +47,13 @@ import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
 
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity{
 
     private final String TAG = "MainActivity";
 
-    private SwipeRefreshLayout swipeLayout;
     private DrawerLayout drawer;
     private List<Recipe> list = new ArrayList<>();
     private RecycleAdapter mAdapter = new RecycleAdapter(list);
-    private ArrayList<Recipe> mBlackList = new ArrayList<Recipe>();
     private ProgressDialog progressDialog;
     private String Email;
     private String Nickname;
@@ -65,15 +63,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ActionBarDrawerToggle drawerToggle;
-    CoordinatorLayout rootLayout;
-    FloatingActionButton fabBtn;
     TextView mEmailTv;
     TextView mNickTv;
     NavigationView mNavigationView;
     Menu mMenu;
 
     private LinearLayoutManager mLinearLayoutManager;
-    private GridLayoutManager mGridLayoutManager;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -84,10 +79,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         initToolbar();
         initNavtigationView();
         initListView();
-        // initSwipeRefreshLayout();
-
-
-
     }
 
     private void initToolbar() {
@@ -190,17 +181,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         loadRecipeList();
 
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
-        //mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
-
-
-//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
-//            }
-//        });
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -258,13 +238,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
 
-//    private void initSwipeRefreshLayout() {
-//        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_container);
-//        swipeLayout.setOnRefreshListener(this);
-//        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.pulltorefresh_color1),
-//                getResources().getColor(R.color.pulltorefresh_color2),
-//                getResources().getColor(R.color.pulltorefresh_color3));
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -285,18 +258,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRefresh() {
-        Toast.makeText(getApplicationContext(), "BoardFragmentRefresh", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 3000);
     }
 
     private void hideprograssDialog() {

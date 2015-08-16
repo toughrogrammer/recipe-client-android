@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 
@@ -17,7 +18,6 @@ import kr.swmaestro.recipe.model.Recipe;
  */
 public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
 
-    private static final int COUNT = 100;
     private ImageLoader mImageLoader;
     private List<Recipe> list;
 
@@ -32,16 +32,19 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerHolder holder, int position) {
+    public void onBindViewHolder(RecyclerHolder holder, final int position) {
         setItem(holder, position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Recycle Click" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-
 
     private void setItem(RecyclerHolder holder, int position) {
         Recipe recipe = list.get(position);
         holder.mRecycleHolder.mTitle.setText(recipe.getTitle());
-
         holder.mRecycleHolder.mImage.setImageUrl(recipe.getImageurl(), mImageLoader);
     }
 

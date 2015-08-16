@@ -61,6 +61,7 @@ public class IntroActivity extends AppCompatActivity{
                         try {
                             editor.putString("nickname", response.get("nickname").toString());
                             editor.putString("email", response.get("email").toString());
+                            editor.putString("id",response.get("id").toString());
                             editor.commit();
                         } catch (JSONException e) {
                             e.printStackTrace();
