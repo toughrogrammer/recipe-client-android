@@ -34,5 +34,6 @@
             android:textColor="#ffffffff"
             android:textSize="75sp"
             android:textStyle="bold"/>
-        </RelativeLayout>
+
+    </RelativeLayout>
 </FrameLayout>
