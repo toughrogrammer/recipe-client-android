@@ -5,18 +5,21 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
+import kr.swmaestro.recipe.model.Recipe;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -34,20 +37,25 @@ public class RecipeActivity extends AppCompatActivity{
     //보관일 expire (int)
     //title
     //id
-
+    private TextView tvMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipe);
+        init();
         loadrecipe();
         loadmethods();
 
     }
 
+    private void init() {
+        tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
+    }
+
     private void loadrecipe() {
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
+        String id = intent.getStringExtra("id")+"";
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
@@ -70,7 +78,7 @@ public class RecipeActivity extends AppCompatActivity{
 
     private void loadmethods() {
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
+        String id = intent.getStringExtra("id")+"";
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
@@ -80,6 +88,20 @@ public class RecipeActivity extends AppCompatActivity{
             public void onResponse(JSONArray response) {
 
                 Log.i("test",response.toString());
+                String recipe = "";
+                for(int i=0; i< response.length(); i++){
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+
+                        if(jsonObject.has("content")){
+                            recipe += jsonObject.get("content")+"\n";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.i("recipe",recipe);
+                tvMethods.setText(recipe);
             }
         }, new Response.ErrorListener() {
             @Override

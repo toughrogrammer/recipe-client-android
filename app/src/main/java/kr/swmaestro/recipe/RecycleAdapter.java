@@ -1,7 +1,9 @@
 package kr.swmaestro.recipe;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import com.android.volley.toolbox.ImageLoader;
 import java.util.List;
 
 import kr.swmaestro.recipe.model.Recipe;
+import kr.swmaestro.recipe.ui.MainActivity;
+import kr.swmaestro.recipe.ui.RecipeActivity;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -38,6 +42,10 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
             @Override
             public void onClick(View view) {
                 Toast.makeText(view.getContext(), "Recycle Click" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), RecipeActivity.class);
+                intent.putExtra("id",list.get(position).getItemId()+"");
+                Log.i("id", list.get(position).getItemId()+"");
+                view.getContext().startActivity(intent);
             }
         });
     }

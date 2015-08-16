@@ -1,6 +1,7 @@
 package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
-                Log.i("onLoadMore",current_page+"");
+                Log.i("onLoadMore", current_page + "");
                 visibleprogress();
                 loadRecipeList();
             }
@@ -266,4 +267,5 @@ public class MainActivity extends AppCompatActivity{
             progressDialog = null;
         }
     }
+
 }

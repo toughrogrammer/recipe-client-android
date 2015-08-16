@@ -19,7 +19,7 @@ public class Recipe {
         return title;
     }
 
-    public int getId() {
+    public int getItemId() {
         return id;
     }
 

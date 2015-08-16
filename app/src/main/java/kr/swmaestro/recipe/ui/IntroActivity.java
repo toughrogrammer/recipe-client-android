@@ -66,6 +66,7 @@ public class IntroActivity extends AppCompatActivity{
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Log.i("IntroActivity","Success");
                         Intent intent = new Intent(IntroActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
