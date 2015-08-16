@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_margin="8dp"
-        android:background="#41000000"
+        android:background="#deeadb"
         android:orientation="vertical">
 
         <FrameLayout
@@ -33,7 +33,7 @@
         </FrameLayout>
 
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/rl_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,43 +42,40 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:background="#4e000000">
+            android:background="#c4d0b6">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1">
+                android:layout_gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
                     android:src="@mipmap/ic_launcher" />
-
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="6">
                 <TextView
                     android:id="@+id/tv_tittle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Header"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#ffffff"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
+                    android:textSize="24sp"
+                    android:layout_marginLeft="8dp"/>
             </LinearLayout>
 
-        </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 

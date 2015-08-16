@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity{
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity{
             final Field tpf = object.getClass().getDeclaredField("mTextPaint");
             tpf.setAccessible(true);
 
-            ((TextPaint) tpf.get(object)).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarumGothicBold.ttf"));
+            ((TextPaint) tpf.get(object)).setTypeface(Typeface.createFromAsset(getAssets(), "Yoon.ttf"));
         } catch (Exception ignored) {
         }
     }

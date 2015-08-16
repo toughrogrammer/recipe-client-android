@@ -14,6 +14,8 @@
     <color name="txt_main">#000000</color>
     <color name="txt_sub">#999999</color>
     <color name="txt_reverse">#ffffff</color>
+    <color name="drawer1">#f8aa6a</color>
+    <color name="drawer2">#ffffff</color>
 
     <color name="divider">#dddddd</color>
 
