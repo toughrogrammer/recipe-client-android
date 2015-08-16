@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/activity_main_AppBar"
             android:layout_width="match_parent"
             android:layout_height="256dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -21,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/background"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleMarginStart="16dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -39,7 +41,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                    app:theme="@style/custom" />
 
             </android.support.design.widget.CollapsingToolbarLayout>
 
