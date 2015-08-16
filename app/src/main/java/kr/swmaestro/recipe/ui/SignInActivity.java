@@ -3,7 +3,6 @@ package kr.swmaestro.recipe.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ import java.util.HashMap;
 
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
-import kr.swmaestro.recipe.util.SignInRequest;
+import kr.swmaestro.recipe.Request.SignInRequest;
 import android.widget.ImageView;
 import android.widget.Toast;
 

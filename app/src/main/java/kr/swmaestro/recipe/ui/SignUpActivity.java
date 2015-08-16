@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,7 +25,7 @@ import java.util.regex.Pattern;
 
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.util.SignUpRequest;
+import kr.swmaestro.recipe.Request.SignUpRequest;
 
 /**
  * Created by lk on 2015. 7. 27..
