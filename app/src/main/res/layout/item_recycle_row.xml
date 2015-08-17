@@ -39,7 +39,7 @@
                 android:layout_below="@+id/tv_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subtitle"
+                android:text="Like"
                 android:textSize="20sp"
                 android:id="@+id/bt_recycle_like" />
 

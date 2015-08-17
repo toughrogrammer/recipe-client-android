@@ -1,12 +1,17 @@
 package kr.swmaestro.recipe.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +24,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
@@ -46,15 +52,18 @@ public class RecipeActivity extends AppCompatActivity{
     private String id;
     private String token;
     private LinearLayout layout;
+    FrameLayout preview;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipe);
+        context = this;
         init();
         loadrecipe();
         loadmethods();
-        //loadThumnail();
+        loadThumnail();
     }
 
     private void init() {
@@ -64,8 +73,9 @@ public class RecipeActivity extends AppCompatActivity{
         id = intent.getStringExtra("id")+"";
         token = pref.getString("token", "NON");  // get Token
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
-        layout = new LinearLayout(getApplicationContext());
-        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail);
+        preview = new FrameLayout(this);
+        //layout.setOrientation(LinearLayout.HORIZONTAL);
     }
 
     private void loadrecipe() {
@@ -137,14 +147,23 @@ public class RecipeActivity extends AppCompatActivity{
                             imgurl = jsonObject.get("reference").toString();
                             ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
                             NetworkImageView mImage;
-                            mImage = new NetworkImageView(getApplicationContext());
+                            mImage = new NetworkImageView(context);
                             mImage.setImageUrl(imgurl, mImageLoader);
-                            layout.addView(mImage);
+                            mImage.setLayoutParams(new LinearLayout.LayoutParams(150, 100));
+                            mImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                            preview.addView(mImage);
+                            TextView tv = new TextView(context);
+                            tv.setText("fdsafafsafassfa");
+                            tv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                            tv.setVisibility(View.VISIBLE);
+                            preview.addView(tv,0);
+                            preview.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                layout.addView(preview);
 
 
             }
