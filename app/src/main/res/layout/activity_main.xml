@@ -10,7 +10,7 @@
         android:id="@+id/activity_main_rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#d9fffad3">
+        android:background="#53fffad3">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/activity_main_AppBar"
