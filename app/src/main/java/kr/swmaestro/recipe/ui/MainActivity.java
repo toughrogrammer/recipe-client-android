@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout drawer;
     private List<Recipe> list = new ArrayList<>();
-    private RecycleAdapter mAdapter = new RecycleAdapter(list);
+    private RecycleAdapter mAdapter = new RecycleAdapter(list, this);
     private ProgressDialog progressDialog;
     private String Email;
     private String Nickname;
