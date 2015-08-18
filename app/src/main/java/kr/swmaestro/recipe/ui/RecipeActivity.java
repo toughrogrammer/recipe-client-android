@@ -1,14 +1,20 @@
 package kr.swmaestro.recipe.ui;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -30,6 +36,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
+import kr.swmaestro.recipe.helper.MakeBlurHelper;
 import kr.swmaestro.recipe.model.Recipe;
 
 /**
@@ -55,6 +62,7 @@ public class RecipeActivity extends AppCompatActivity{
     FrameLayout preview;
     Context context;
     private NetworkImageView imageView;
+    TranslateAnimation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,9 @@ public class RecipeActivity extends AppCompatActivity{
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
 
         id = intent.getStringExtra("id")+"";
+        String imgurl = intent.getStringExtra("thumbnail");
+        ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+        imageView.setImageUrl(imgurl , mImageLoader);
         token = pref.getString("token", "NON");  // get Token
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
         layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail2);
@@ -113,6 +124,7 @@ public class RecipeActivity extends AppCompatActivity{
 
                         if(jsonObject.has("content")){
                             recipe += jsonObject.get("content")+"\n";
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -139,6 +151,7 @@ public class RecipeActivity extends AppCompatActivity{
 
                 Log.i("test",response.toString());
                 String imgurl = "";
+                //이곳에 맨 처음 시작부분 layout.addView
                 for(int i=0; i< response.length(); i++){
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
@@ -148,8 +161,12 @@ public class RecipeActivity extends AppCompatActivity{
                             ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
                             NetworkImageView mImage;
                             mImage = new NetworkImageView(getApplicationContext());
-                            mImage.setImageUrl(imgurl,mImageLoader);
-                            layout.addView(mImage);
+                            mImage.setImageUrl(imgurl, mImageLoader);
+
+
+                            //layout.addView(mImage);
+                            layout.addView(mImage, 1100, 900);
+                            layout.setBackgroundColor(Color.BLACK);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -167,5 +184,10 @@ public class RecipeActivity extends AppCompatActivity{
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
+//    private void animationScroll(){
+//        ObjectAnimator animator = ObjectAnimator. ofInt(R.id.activity_receipe_scroll,"scrollX",1);
+//        animator . setDuration ( 800 );
+//        animator . start ();
+//    }
 
 }

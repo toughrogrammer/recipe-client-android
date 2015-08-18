@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +62,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder>{
                 Toast.makeText(view.getContext(), "Recycle Click" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), RecipeActivity.class);
                 intent.putExtra("id",list.get(position).getItemId()+"");
+                intent.putExtra("titleThumbnail", list.get(position).getImageurl());
                 Log.i("id", list.get(position).getItemId()+"");
                 view.getContext().startActivity(intent);
             }
@@ -67,9 +70,18 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder>{
     }
 
     private void setItem(final RecyclerHolder holder, int position) {
+
         final Recipe recipe = list.get(position);
+
         holder.mRecycleHolder.mTitle.setText(recipe.getTitle());
         holder.mRecycleHolder.mImage.setImageUrl(recipe.getImageurl(), mImageLoader);
+
+//        ImageLoader.ImageContainer container = (ImageLoader.ImageContainer) holder.mRecycleHolder.mImage.getTag();
+//        holder.mRecycleHolder.mBitmap = container.getBitmap();
+//        if (holder.mRecycleHolder.mBitmap!= null) {
+//            holder.mRecycleHolder.coverImage.setImageBitmap(holder.mRecycleHolder.mBitmap);
+//        }
+
         if(!recipe.getWasLike().equals(""))
             holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);
         holder.mRecycleHolder.mlikeButton.setOnClickListener(new View.OnClickListener() {
