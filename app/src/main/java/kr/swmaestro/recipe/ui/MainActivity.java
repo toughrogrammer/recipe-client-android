@@ -21,8 +21,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.TextPaint;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout drawer;
     private List<Recipe> list = new ArrayList<>();
-    private RecycleAdapter mAdapter = new RecycleAdapter(list);
+    private RecycleAdapter mAdapter = new RecycleAdapter(list, this);
     private ProgressDialog progressDialog;
     private String Email;
     private String Nickname;
@@ -139,18 +136,9 @@ public class MainActivity extends AppCompatActivity{
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
-        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
-//        SpannableString s = new SpannableString("My Title");
-//        TypefaceSpan robotoTFS = new TypefaceSpan("NanumBarunGothicBold.ttf");
-//        s.setSpan(robotoTFS, 0, s.length(),
-//                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-//        getSupportActionBar().setTitle(s);
 
         NavigationView nv = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         nv.setNavigationItemSelectedListener(
@@ -224,12 +212,15 @@ public class MainActivity extends AppCompatActivity{
                 for(int i=0; i< response.length(); i++){
                     try {
                         String imgurl = "";
+                        String wasLiked = "";
                         JSONObject jsonObject = response.getJSONObject(i);
                         if(jsonObject.has("thumbnail")){
                             JSONObject imginfo = jsonObject.getJSONObject("thumbnail");
                             imgurl = imginfo.getString("reference");
                         }
-                        Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgurl);
+                        if(jsonObject.has("wasLiked"))
+                            wasLiked = jsonObject.getString("wasLiked");
+                        Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgurl, wasLiked);
 
                         list.add(recipe);
                     } catch (JSONException e) {
@@ -249,22 +240,6 @@ public class MainActivity extends AppCompatActivity{
         });
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
-
-
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
-        //mRecyclerView.setOnScrollListener(touchListener.makeScrollListener());
-
-
-//        mRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(), "아이템 클릭", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-        swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
-
     }
 
 
@@ -289,53 +264,11 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-
-    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            // callback for drag-n-drop, false to skip this feature
-            return false;
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            // callback for swipe to dismiss, removing item from data and adapter
-            list.remove(viewHolder.getAdapterPosition());
-            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-        }
-    });
-
-
-//    @Override
-//    public void onRefresh() {
-//        Toast.makeText(getApplicationContext(), "BoardFragmentRefresh", Toast.LENGTH_SHORT).show();
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeLayout.setRefreshing(false);
-//            }
-//        }, 3000);
-//    }
-
     private void hideprograssDialog() {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }
     }
-    private void makeCollapsingToolbarLayoutLooksGood(CollapsingToolbarLayout collapsingToolbarLayout) {
-        try {
-            final Field field = collapsingToolbarLayout.getClass().getDeclaredField("mCollapsingTextHelper");
-            field.setAccessible(true);
 
-            final Object object = field.get(collapsingToolbarLayout);
-            final Field tpf = object.getClass().getDeclaredField("mTextPaint");
-            tpf.setAccessible(true);
-
-            ((TextPaint) tpf.get(object)).setTypeface(Typeface.createFromAsset(getAssets(), "Yoon.ttf"));
-        } catch (Exception ignored) {
-        }
-    }
 }

@@ -1,5 +1,7 @@
 package kr.swmaestro.recipe.Request;
 
+import android.content.SharedPreferences;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -15,26 +17,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by lk on 2015. 8. 2..
+ * Created by lk on 2015. 8. 17..
  */
-public class JsonObjectRequest extends Request<JSONObject>{
+public class LikeRequest  extends Request<JSONObject> {
 
-    private String token;
+
+    private Map<String, String> mParams;
     private Response.Listener<JSONObject> listener;
+    private String token;
 
-    public JsonObjectRequest(int model, String url, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
-        super(model, url, errorListener);
+    public LikeRequest(int id, String userid, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        super(Method.POST, "http://recipe-main.herokuapp.com/likes", errorListener);
+
+        mParams = new HashMap<String, String>();
+        mParams.put("recipe", id + "");
+        mParams.put("user",userid +"");
         this.token = token;
         listener = successListener;
     }
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+        String parsed = null;
         try {
-            String jsonString = new String(response.data,
-                    HttpHeaderParser.parseCharset(response.headers));
-
-            return Response.success(new JSONObject(jsonString),
+            parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            return Response.success(new JSONObject(parsed),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -43,6 +50,11 @@ public class JsonObjectRequest extends Request<JSONObject>{
             e.printStackTrace();
             return Response.error(new VolleyError(e));
         }
+    }
+
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        return mParams;
     }
 
     @Override
