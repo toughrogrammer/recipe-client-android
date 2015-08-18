@@ -17,10 +17,18 @@
     </style>
 
     <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#F44336</item>
-        <item name="colorPrimaryDark">#D32F2F</item>
-        <item name="colorAccent">#ffffff</item>
+        <item name="colorPrimary">#efd19d</item>
+        <item name="colorPrimaryDark">#ff000000</item>
+        <item name="colorAccent">#E91E63</item>
+    </style>
 
+    <style name="custom" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:fontFamily">NanumBarunGothicBold.ttf</item>
+    </style>
+
+    <style name="expandedappbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">#f7ffffff</item>
     </style>
 
 </resources>

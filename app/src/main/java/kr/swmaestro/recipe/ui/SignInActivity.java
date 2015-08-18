@@ -3,7 +3,6 @@ package kr.swmaestro.recipe.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ import java.util.HashMap;
 
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
-import kr.swmaestro.recipe.util.SignInRequest;
+import kr.swmaestro.recipe.Request.SignInRequest;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,6 +40,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private String mEmail;
     private String mPassword;
+    private SignUpActivity signup;
 
     EditText emailEt;
     EditText passwordEt;
@@ -58,6 +58,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
+        signup     = new SignUpActivity();
 
         ImageView bgImageView = (ImageView) findViewById(R.id.activity_singnin_background);
         Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 1);
@@ -104,13 +105,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.bt_signin_signup:
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+                //intent.putExtra("email",emailEt.getText());
                 startActivity(intent);
                 break;
         }
     }
 
     private void Signin() {
-        final View coordinatorLayoutView = findViewById(R.id.snackbarPosition);
+        final View coordinatorLayoutView = findViewById(R.id.sb_signin_snackbarposition);
         mEmail = emailEt.getText().toString();
         mPassword = passwordEt.getText().toString();
 
@@ -133,12 +135,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         editor.putString("token", json.get("accessToken").toString());
                         editor.commit();
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        //intent.putExtra("email",emailEt.getText());
                         startActivity(intent);
                         finish();
                     }
                     else
                         Snackbar
-                                .make(coordinatorLayoutView, "아이디 또는 비밀번호가 잘못되었습니다.", Snackbar.LENGTH_LONG)
+                                .make(coordinatorLayoutView, "이메일 또는 비밀번호가 잘못되었습니다.", Snackbar.LENGTH_LONG)
                                 .show();
                         //mTextView.setText("정상가입");
                 } catch (JSONException e) {

@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".NavigationViewActivity">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_memberInfo"
+            android:id="@+id/menuItem1"
             android:title="회원정보" />
+        <item
+            android:id="@+id/menuItem2"
+            android:title="회원정보 수정" />
     </group>
     <item android:title="요리 메뉴">
         <menu>
             <item
-                android:icon="@drawable/ic_remove_red_eye_white_24dp"
-                android:id="@+id/nav_uploadRecipe"
-                android:title="레시피등록" />
+                android:icon="@drawable/ic_star_black_24dp"
+                android:id="@+id/menuItem3"
+                android:title="레시피 등록" />
             <item
-                android:icon="@drawable/red_circle"
-                android:id="@+id/nav_setTaste"
-                android:title="식감설정" />
+                android:icon="@drawable/ic_done_black_24dp"
+                android:id="@+id/menuItem4"
+                android:title="식감선택"/>
+            <item
+                android:icon="@drawable/ic_filter_none_black_24dp"
+                android:id="@+id/menuItem5"
+                android:title="필터"/>
+            <item
+                android:icon="@mipmap/ic_settings_black_24dp"
+                android:id="@+id/menuItem6"
+                android:title="앱설정"/>
         </menu>
     </item>
 
