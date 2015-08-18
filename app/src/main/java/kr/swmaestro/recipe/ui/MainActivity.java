@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity{
     TextView mNickTv;
     NavigationView mNavigationView;
     Menu mMenu;
+
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
 
@@ -238,8 +238,6 @@ public class MainActivity extends AppCompatActivity{
                         if(jsonObject.has("wasLiked"))
                             wasLiked = jsonObject.getString("wasLiked");
                         Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgurl, wasLiked);
-
-
                         list.add(recipe);
                     } catch (JSONException e) {
                         e.printStackTrace();

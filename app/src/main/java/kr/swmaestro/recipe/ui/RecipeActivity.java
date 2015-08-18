@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -59,6 +60,8 @@ public class RecipeActivity extends AppCompatActivity{
     private String id;
     private String token;
     private LinearLayout layout;
+    private String title;
+    private TextView Tv_title;
     FrameLayout preview;
     Context context;
     private NetworkImageView imageView;
@@ -80,9 +83,6 @@ public class RecipeActivity extends AppCompatActivity{
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
 
         id = intent.getStringExtra("id")+"";
-        String imgurl = intent.getStringExtra("thumbnail");
-        ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-        imageView.setImageUrl(imgurl , mImageLoader);
         token = pref.getString("token", "NON");  // get Token
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
         layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail2);
@@ -91,6 +91,10 @@ public class RecipeActivity extends AppCompatActivity{
 
     private void loadrecipe() {
 
+        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+
+        Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
+
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
         JsonObjectRequest recipeRequest = new JsonObjectRequest(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id
@@ -98,7 +102,14 @@ public class RecipeActivity extends AppCompatActivity{
             @Override
             public void onResponse(JSONObject response) {
 
-                Log.i("test",response.toString());
+                Log.i("test", response.toString());
+                try {
+                    title = response.getString("title");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Tv_title.setText(title);
+                Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -164,9 +175,7 @@ public class RecipeActivity extends AppCompatActivity{
                             mImage.setImageUrl(imgurl, mImageLoader);
 
 
-                            //layout.addView(mImage);
                             layout.addView(mImage, 1100, 900);
-                            layout.setBackgroundColor(Color.BLACK);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

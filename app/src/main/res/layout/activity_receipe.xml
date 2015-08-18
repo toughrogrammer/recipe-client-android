@@ -8,83 +8,84 @@
 
 <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#00ff00">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/activity_receipe_coverimage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:background="#88000000"
+        android:background="@drawable/background"
         android:scaleType="fitXY" />
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="#ffff00">
+            android:orientation="vertical">
             <LinearLayout
+                android:id="@+id/activity_receipe_titleLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2.5"
-                android:background="#ffff0f9d">
+                android:layout_height="wrap_content"
+                android:background="#67000000">
                 <TextView
+                    android:id="@+id/activity_receipe_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="#ffffff"
                     android:text="test"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/activity_receipe_image"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="5">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_receipe_titleLayout">
                 <HorizontalScrollView
                     android:id="@+id/activity_receipe_scroll"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#00ffff">
+                    android:layout_height="match_parent">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:background="#ffffff"
-                        android:id="@+id/ll_recipe_methodThumnail2">
+                        android:id="@+id/ll_recipe_methodThumnail2"
+                        android:background="#be000000">
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/activity_receipe_image"
                 android:orientation="vertical"
-                android:id="@+id/ll_recipe_methodThumnail"
-                android:background="#ffffff">
+                android:id="@+id/ll_recipe_methodThumnail">
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#ff2546ff">
+                    android:layout_height="match_parent">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="New Text"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
                         android:id="@+id/tv_recipe_methods"
+                        android:textColor="#ffffff"
                         android:layout_gravity="center_horizontal" />
                 </ScrollView>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#000000"/>
+                    android:background="#98000000"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -96,7 +97,7 @@
                     android:layout_weight="1"
                     android:text="리뷰목록"/>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
