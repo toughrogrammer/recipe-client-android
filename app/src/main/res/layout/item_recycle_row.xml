@@ -49,7 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical">
 
-                <ImageView
+                <Button
+                    android:id="@+id/bt_recycle_like"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="8dp"
