@@ -50,8 +50,9 @@ public class RecipeActivity extends AppCompatActivity{
 
     //todo Refactoring
     private TextView tvMethods;
-    private String id;
-    private String token;
+    private String id;              // RecipeID
+    private String token;           // UserToken
+    private String userid;          // UserID
     private LinearLayout layout;
     private String title;
     private TextView Tv_title;
@@ -67,8 +68,10 @@ public class RecipeActivity extends AppCompatActivity{
         context = this;
         init();
         loadrecipe();
+        getPreferenceData();
         loadmethods();
         loadThumnail();
+        sendViewEvent();
     }
 
     private void init() {
@@ -87,11 +90,16 @@ public class RecipeActivity extends AppCompatActivity{
             }
         });
 
-        id = intent.getStringExtra("id")+"";
-        token = pref.getString("token", "NON");  // get Token
+        id = intent.getStringExtra("id")+"";            // get recipeId
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
         layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail2);
 
+    }
+
+    public void getPreferenceData() {
+        SharedPreferences pref = context.getSharedPreferences("pref", 0);
+        this.token = pref.getString("token", "NON");    // get Token
+        this.userid = pref.getString("id", "NON");      // get userId
     }
 
     private void loadrecipe() {
@@ -99,10 +107,6 @@ public class RecipeActivity extends AppCompatActivity{
         tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
         Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
-
-
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        String token = pref.getString("token", "NON");  // get Token
 
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
@@ -202,5 +206,31 @@ public class RecipeActivity extends AppCompatActivity{
         });
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
+    }
+
+    private void sendViewEvent(){
+
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.POST+"");
+        request.put("url", AppSetting.viewUrl);
+        request.put("token", token);
+        request.put("recipe", id+"");
+        request.put("user", userid);
+
+        JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ViewEvent", "Success");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("volley", error.toString());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(recipeRequest);
+
     }
 }
