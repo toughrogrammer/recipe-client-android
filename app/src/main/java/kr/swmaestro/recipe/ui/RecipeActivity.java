@@ -85,6 +85,14 @@ public class RecipeActivity extends AppCompatActivity{
         like = (ImageButton) findViewById(R.id.bt_recycle_like);
         reviewlist = (ImageButton) findViewById(R.id.activity_receipe_review);
 
+        reviewlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecipeActivity.this, ReviewActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         id = intent.getStringExtra("id")+"";
         token = pref.getString("token", "NON");  // get Token
@@ -199,7 +207,6 @@ public class RecipeActivity extends AppCompatActivity{
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
-
 //    private void animationScroll(){
 //        ObjectAnimator animator = ObjectAnimator. ofInt(R.id.activity_receipe_scroll,"scrollX",1);
 //        animator . setDuration ( 800 );
