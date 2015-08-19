@@ -14,10 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:background="@drawable/background"
+        android:background="@drawable/background4"
         android:scaleType="fitXY" />
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,79 +27,102 @@
             <LinearLayout
                 android:id="@+id/activity_receipe_titleLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#67000000">
+                android:layout_height="100dp">
                 <TextView
                     android:id="@+id/activity_receipe_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="#ffffff"
-                    android:text="test"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="24sp"
+                    android:textColor="#ffffff"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/activity_receipe_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#6a000000"
                 android:layout_below="@+id/activity_receipe_titleLayout">
                 <HorizontalScrollView
                     android:id="@+id/activity_receipe_scroll"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:overScrollMode="always">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:id="@+id/ll_recipe_methodThumnail2"
-                        android:background="#be000000">
+                        android:id="@+id/ll_recipe_methodThumnail2">
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_recipe_methodThumnailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/activity_receipe_image"
+                android:layout_above="@+id/activity_receipe_bottombar"
                 android:orientation="vertical"
-                android:id="@+id/ll_recipe_methodThumnail">
+                android:background="#6a000000">
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center">
                     <TextView
+                        android:id="@+id/tv_recipe_methods"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="New Text"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:id="@+id/tv_recipe_methods"
+                        android:layout_marginBottom="8dp"
+                        android:lineSpacingMultiplier = "1.4"
                         android:textColor="#ffffff"
                         android:layout_gravity="center_horizontal" />
                 </ScrollView>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/activity_receipe_bottombar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal">
-                <Button
+                android:orientation="horizontal"
+                android:background="#000000">
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#98000000"/>
-                <TextView
+                    android:layout_weight="5">
+                </LinearLayout>
+                <ImageButton
+                    android:id="@+id/bt_recycle_like"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
                     android:layout_weight="1"
-                    android:text="리뷰등록" />
-                <TextView
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_favorite_white_24dp"
+                    android:background="#00ffffff"
+                    android:textColor="#ffffff"/>
+                <ImageButton
+                    android:id="@+id/activity_receipe_review"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="리뷰목록"/>
+                    android:gravity="center_vertical"
+                    android:textColor="#ffffff"
+                    android:background="#00ffffff"
+                    android:src="@drawable/ic_mode_comment_white_24dp"/>
             </LinearLayout>
         </RelativeLayout>
+</LinearLayout>
 </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
