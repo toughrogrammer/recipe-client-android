@@ -21,11 +21,21 @@ public class JsonObjectRequest extends Request<JSONObject>{
 
     private String token;
     private Response.Listener<JSONObject> listener;
+    private Map<String, String> mParams;
 
     public JsonObjectRequest(HashMap<String, String> request, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         super(Integer.parseInt(request.get("model")), request.get("url"), errorListener);
         this.token = request.get("token");
         listener = successListener;
+
+        if(request.get("model").equals(Method.POST+"")) {
+            mParams = request;
+            mParams.remove("model");
+            mParams.remove("url");
+            mParams.remove("token");
+        }else{
+            mParams = new HashMap<>();
+        }
     }
 
     @Override
@@ -54,5 +64,10 @@ public class JsonObjectRequest extends Request<JSONObject>{
         Map params = new HashMap();
         params.put("Authorization", "Bearer " + token);
         return params;
+    }
+
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        return mParams;
     }
 }
