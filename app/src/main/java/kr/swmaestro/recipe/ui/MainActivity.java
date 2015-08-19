@@ -39,7 +39,7 @@ import kr.swmaestro.recipe.RecycleAdapter;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
-import kr.swmaestro.recipe.util.util;
+import kr.swmaestro.recipe.util.AppSetting;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity{
 
         mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
         mEmailTv.setText(Email);
-        mEmailTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        mEmailTv.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
         mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
-        mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
         mNickTv.setText(Nickname);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer);
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity{
                     mNavigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
                 }
                 for (final View menuItem : mMenuItems) {
-                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"), Typeface.BOLD);
+                    ((TextView) menuItem).setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont), Typeface.BOLD);
                 }
             }
         });
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void loadRecipeList() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "?limit=" + recipeRecallCount +"&skip="+count, token,new Response.Listener<JSONArray>() {
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "?limit=" + recipeRecallCount +"&skip="+count, token,new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();                                                      // Hide PrograssDialog at the end of the recipe loaded

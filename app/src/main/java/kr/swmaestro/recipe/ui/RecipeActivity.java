@@ -5,14 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -34,7 +29,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
-import kr.swmaestro.recipe.util.util;
+import kr.swmaestro.recipe.util.AppSetting;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -52,6 +47,8 @@ public class RecipeActivity extends AppCompatActivity{
     //보관일 expire (int)
     //title
     //id
+
+    //todo Refactoring
     private TextView tvMethods;
     private String id;
     private String token;
@@ -99,7 +96,7 @@ public class RecipeActivity extends AppCompatActivity{
 
     private void loadrecipe() {
 
-        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
         Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
 
@@ -109,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity{
 
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
-        request.put("url", util.recipeUrl + "/" + id);
+        request.put("url", AppSetting.recipeUrl + "/" + id);
         request.put("token", token);
 
         JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
@@ -123,7 +120,7 @@ public class RecipeActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
                 Tv_title.setText(title);
-                Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+                Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -136,7 +133,7 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadmethods() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "/" + id+"/methods"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "/" + id+"/methods"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -169,7 +166,7 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadThumnail(){
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "/" + id+"/methodThumbs"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "/" + id+"/methodThumbs"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

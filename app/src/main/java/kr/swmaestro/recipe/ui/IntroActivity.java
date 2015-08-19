@@ -21,7 +21,7 @@ import java.util.HashMap;
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
-import kr.swmaestro.recipe.util.util;
+import kr.swmaestro.recipe.util.AppSetting;
 
 /**
  * Created by lk on 2015. 7. 31..
@@ -46,7 +46,7 @@ public class IntroActivity extends AppCompatActivity{
     }
 
     private void initView() {
-        tf = Typeface.createFromAsset(getAssets(),"Nanumbut.ttf");
+        tf = Typeface.createFromAsset(getAssets(), AppSetting.logoFont);
         myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
         myTv.setTypeface(tf, Typeface.BOLD);
         foodTv = (TextView) findViewById(R.id.activity_signin_Food_tx);
@@ -63,7 +63,7 @@ public class IntroActivity extends AppCompatActivity{
 
                 HashMap<String, String> request = new HashMap<>();
                 request.put("model", Request.Method.POST+"");
-                request.put("url", util.tokenUrl);
+                request.put("url", AppSetting.tokenUrl);
                 request.put("token", token);
 
                 JsonObjectRequest tokenRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
