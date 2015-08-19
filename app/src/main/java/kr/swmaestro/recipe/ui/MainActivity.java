@@ -21,7 +21,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +32,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,6 +68,7 @@ public class MainActivity extends AppCompatActivity{
     TextView mNickTv;
     NavigationView mNavigationView;
     Menu mMenu;
+
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
 
@@ -169,22 +168,6 @@ public class MainActivity extends AppCompatActivity{
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            // callback for drag-n-drop, false to skip this feature
-            return false;
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            // callback for swipe to dismiss, removing item from data and adapter
-            list.remove(viewHolder.getAdapterPosition());
-            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-        }
-    });
-
     private void initListView() {
 
         visibleprogress();
@@ -239,7 +222,6 @@ public class MainActivity extends AppCompatActivity{
                             wasLiked = jsonObject.getString("wasLiked");
                         Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgurl, wasLiked);
 
-
                         list.add(recipe);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -258,8 +240,6 @@ public class MainActivity extends AppCompatActivity{
         });
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
-
-        swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
 
