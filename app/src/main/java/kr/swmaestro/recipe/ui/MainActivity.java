@@ -1,23 +1,17 @@
 package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -46,40 +39,54 @@ import kr.swmaestro.recipe.RecycleAdapter;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
+import kr.swmaestro.recipe.util.util;
 
 
 public class MainActivity extends AppCompatActivity{
 
+    private Toolbar toolbar;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle drawerToggle;
+    private NavigationView mNavigationView;
+
+    private List<Recipe> list = new ArrayList<>();                      // Recipe List
+    private RecyclerView mRecyclerView;                                 // Recipe Recycle View
+    private RecycleAdapter mAdapter = new RecycleAdapter(list, this);   // Recycle View Adapter(Recipe list, Content)
+    private LinearLayoutManager mLinearLayoutManager;
+
+    private Menu mMenu;
+    private ArrayList<View> mMenuItems = new ArrayList<>(6);
+
+    private String Email;                                               // Email in Preference
+    private String Nickname;                                            // Nickname in Preference
+    private String token;
+    private TextView mEmailTv;                                          // TextView in drawer to show the Email
+    private TextView mNickTv;                                           // TextView in drawer to show the Nickname
+
+    private ProgressDialog progressDialog;
+
+    private int count = 0;                                                  // Recipe number for more loading
+    private int recipeRecallCount = 15;                                       // Recipe number recall a time
+
     private final String TAG = "MainActivity";
 
-    private DrawerLayout drawer;
-    private List<Recipe> list = new ArrayList<>();
-    private RecycleAdapter mAdapter = new RecycleAdapter(list, this);
-    private ProgressDialog progressDialog;
-    private String Email;
-    private String Nickname;
-    private ArrayList<View> mMenuItems = new ArrayList<>(6);
-    private int count;
-
-    Toolbar toolbar;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    ActionBarDrawerToggle drawerToggle;
-    TextView mEmailTv;
-    TextView mNickTv;
-    NavigationView mNavigationView;
-    Menu mMenu;
-
-    private LinearLayoutManager mLinearLayoutManager;
-    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        count = 0;
-        initToolbar();
-        initNavtigationView();
-        initListView();
+        this.getPreferenceData();
+        this.initToolbar();
+        this.initNavtigationView();
+        this.initListView();
+    }
+
+    public void getPreferenceData() {
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        Email = pref.getString("email","test@gmail.com");   // get Email
+        Nickname = pref.getString("nickname","Test");       // get Nickname
+        token = pref.getString("token", "NON");             // get Token
     }
 
     private void initToolbar() {
@@ -95,27 +102,19 @@ public class MainActivity extends AppCompatActivity{
 
     private void initNavtigationView() {
 
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        Email = pref.getString("email","test@gmail.com");  // get Email
-        Nickname = pref.getString("nickname","Test");  // get Nickname
-
-
         mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
-        mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
-        mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
-        mMenu = mNavigationView.getMenu();
-
-        mEmailTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
-        mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
-
         mEmailTv.setText(Email);
+        mEmailTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+
+        mNickTv = (TextView) findViewById(R.id.activity_main_nicknameTv);
+        mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         mNickTv.setText(Nickname);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
         drawer.setDrawerListener(drawerToggle);
+        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
 
-        // Install an OnGlobalLayoutListener and wait for the NavigationMenu to fully initialize
+        mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
+        mMenu = mNavigationView.getMenu();
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
@@ -148,12 +147,33 @@ public class MainActivity extends AppCompatActivity{
                         if (menuItem.isCheckable()) {
                             menuItem.setChecked(true);
                         }
-                        Toast.makeText(getApplicationContext(),
-                                menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                         drawer.closeDrawers();
                         return true;
                     }
                 });
+    }
+
+    private void initListView() {
+        visibleprogress();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView.setHasFixedSize(true);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        loadRecipeList();
+
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                Log.i("onLoadMore", current_page + "");
+                visibleprogress();
+                loadRecipeList();
+            }
+        });
     }
 
     @Override
@@ -168,69 +188,40 @@ public class MainActivity extends AppCompatActivity{
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void initListView() {
 
-        visibleprogress();
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
-        mRecyclerView.setHasFixedSize(true);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
-        loadRecipeList();
-
-        mRecyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                Log.i("onLoadMore", current_page + "");
-                visibleprogress();
-                loadRecipeList();
-            }
-        });
-
-
-    }
 
     private void visibleprogress() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("로딩중....");
+        progressDialog.setMessage("Loading....");
         progressDialog.show();
     }
 
     private void loadRecipeList() {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        String token = pref.getString("token", "NON");  // get Token
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET,"http://recipe-main.herokuapp.com/recipes?limit=15&skip="+count, token,new Response.Listener<JSONArray>() {
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "?limit=" + recipeRecallCount +"&skip="+count, token,new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                hideprograssDialog();
+                hideprograssDialog();                                                      // Hide PrograssDialog at the end of the recipe loaded
 
-                Log.i("Test", response.length() + "");
-                for(int i=0; i< response.length(); i++){
+                String imgUrl = "";
+                String wasLiked = "";
+                for (int i = 0; i < response.length(); i++) {
                     try {
-                        String imgurl = "";
-                        String wasLiked = "";
                         JSONObject jsonObject = response.getJSONObject(i);
-                        if(jsonObject.has("thumbnail")){
+                        if (jsonObject.has("thumbnail")) {                                // Set Thumbnail url
                             JSONObject imginfo = jsonObject.getJSONObject("thumbnail");
-                            imgurl = imginfo.getString("reference");
+                            imgUrl = imginfo.getString("reference");
                         }
-                        if(jsonObject.has("wasLiked"))
+                        if (jsonObject.has("wasLiked"))                                   // Set Like id
                             wasLiked = jsonObject.getString("wasLiked");
-                        Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgurl, wasLiked);
-
+                        Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgUrl, wasLiked);
+                        // Recipe Title, Recipe id, Recipe Thumbnail img URL, Like id
                         list.add(recipe);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
-                count+=15;
+                count += 15;
                 mAdapter.notifyDataSetChanged();
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -238,7 +229,6 @@ public class MainActivity extends AppCompatActivity{
                 Log.e("volley", error.toString());
             }
         });
-
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
 
@@ -257,7 +247,7 @@ public class MainActivity extends AppCompatActivity{
         switch (id) {
             case R.id.action_settings:
                 return true;
-            case android.R.id.home: //ActionBar Home button
+            case android.R.id.home:                     //ActionBar Home button
                 drawer.openDrawer(GravityCompat.START); //Open Drawer
                 return true;
         }
@@ -270,5 +260,4 @@ public class MainActivity extends AppCompatActivity{
             progressDialog = null;
         }
     }
-
 }

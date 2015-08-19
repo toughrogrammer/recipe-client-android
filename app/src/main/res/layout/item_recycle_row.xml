@@ -2,12 +2,11 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_vertical_margin"
     card_view:cardCornerRadius="3dp"
     card_view:cardElevation="1dp">
 
     <LinearLayout
-        android:id="@+id/rl_parent"
+        android:id="@+id/rl_recycle_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -34,7 +33,7 @@
 
 
         <FrameLayout
-            android:id="@+id/rl_bottom"
+            android:id="@+id/rl_recycle_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/nv_recycle_image"
@@ -67,12 +66,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="6">
                 <TextView
-                    android:id="@+id/tv_tittle"
+                    android:id="@+id/tv_recycle_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Header"
                     android:gravity="center"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/white"
                     android:textSize="20.5sp"
                     android:layout_marginLeft="8dp"/>
             </LinearLayout>

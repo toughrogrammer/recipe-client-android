@@ -32,6 +32,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
+import kr.swmaestro.recipe.util.util;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -55,9 +56,6 @@ public class RecipeActivity extends AppCompatActivity{
     private LinearLayout layout;
     private String title;
     private TextView Tv_title;
-    FrameLayout preview;
-    private NetworkImageView imageView;
-    TranslateAnimation animation;
     HorizontalScrollView scrollView;
     Context context;
     private ImageButton like;
@@ -72,9 +70,6 @@ public class RecipeActivity extends AppCompatActivity{
         loadrecipe();
         loadmethods();
         loadThumnail();
-
-
-
     }
 
     private void init() {
@@ -93,14 +88,11 @@ public class RecipeActivity extends AppCompatActivity{
             }
         });
 
-
         id = intent.getStringExtra("id")+"";
         token = pref.getString("token", "NON");  // get Token
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
         layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail2);
 
-
-        //layout.setOrientation(LinearLayout.HORIZONTAL);
     }
 
     private void loadrecipe() {
@@ -112,7 +104,7 @@ public class RecipeActivity extends AppCompatActivity{
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-        JsonObjectRequest recipeRequest = new JsonObjectRequest(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id
+        JsonObjectRequest recipeRequest = new JsonObjectRequest(Request.Method.GET, util.recipeUrl + "/" + id
                 , token, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -207,11 +199,4 @@ public class RecipeActivity extends AppCompatActivity{
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
-//    private void animationScroll(){
-//        ObjectAnimator animator = ObjectAnimator. ofInt(R.id.activity_receipe_scroll,"scrollX",1);
-//        animator . setDuration ( 800 );
-//        animator . start ();
-//    }
-
-
 }

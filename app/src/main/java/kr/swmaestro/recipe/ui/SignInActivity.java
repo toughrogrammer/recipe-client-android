@@ -40,26 +40,31 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private String mEmail;
     private String mPassword;
-    private SignUpActivity signup;
 
-    EditText emailEt;
-    EditText passwordEt;
-    TextView myTv;
-    TextView foodTv;
-    Typeface tf;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
+    private EditText emailEt;
+    private EditText passwordEt;
+    private TextView myTv;
+    private TextView foodTv;
+    private Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        initView();
+        this.initPreference();
+        this.initView();
+    }
 
+    private void initPreference() {
+        pref = getSharedPreferences("pref", MODE_PRIVATE);
+        editor = pref.edit();
     }
 
     private void initView() {
-        signup     = new SignUpActivity();
-
         ImageView bgImageView = (ImageView) findViewById(R.id.activity_singnin_background);
         Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 1);
         bgImageView.setImageBitmap(blurImage);
@@ -77,38 +82,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
         passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
 
-        Button signinBt = (Button) findViewById(R.id.bt_signin_signin);
-        Button signupBt = (Button) findViewById(R.id.bt_signin_signup);
+        Button signInBt = (Button) findViewById(R.id.bt_signin_signin);
+        Button signUpBt = (Button) findViewById(R.id.bt_signin_signup);
 
-        signupBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
-        signinBt.setOnClickListener(this);
-        signupBt.setOnClickListener(this);
-
-
-    }
-
-    private Bitmap getBitmapFromDrawable() {
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.background);
-        if (drawable != null) {
-            Bitmap bitmap = drawable.getBitmap();
-            return bitmap;
-        }
-        return null;
-    }
+        signUpBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        signInBt.setOnClickListener(this);
+        signUpBt.setOnClickListener(this);
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.bt_signin_signin:
-                Signin();
-                break;
-            case R.id.bt_signin_signup:
-                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
-                //intent.putExtra("email",emailEt.getText());
-                startActivity(intent);
-                break;
-        }
     }
 
     private void Signin() {
@@ -123,27 +104,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             public void onResponse(String response) {
                 HashMap<String,String> map = new ErrorMap();
 
-                //TextView mTextView = (TextView)findViewById(R.id.tv_signin_result);
-
                 try {
                     JSONObject json = new JSONObject(response);
-                    if(json.has("accessToken")) {
-                        Toast.makeText(getApplication(),"accessToken",Toast.LENGTH_LONG).show();
-                        //mTextView.setText((json.get("accessToken").toString()));
-                        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("token", json.get("accessToken").toString());
+                    if(json.has("accessToken")) {                                               // if Sign_in Success
+                        editor.putString("token", json.get("accessToken").toString());          // save accessToken
                         editor.commit();
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        //intent.putExtra("email",emailEt.getText());
-                        startActivity(intent);
+                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
                         finish();
                     }
-                    else
+                    else                                                                        // else show snackBar
                         Snackbar
                                 .make(coordinatorLayoutView, "이메일 또는 비밀번호가 잘못되었습니다.", Snackbar.LENGTH_LONG)
                                 .show();
-                        //mTextView.setText("정상가입");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -156,5 +128,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
         queue.add(stringRequest);
+    }
+
+    private Bitmap getBitmapFromDrawable() {
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.background);
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            return bitmap;
+        }
+        return null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.bt_signin_signin:     // if Click sign_in button
+                Signin();                   // send Email & password to Server
+                break;
+            case R.id.bt_signin_signup:     // if Click sign_up button, start SignUpActivity
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+                break;
+        }
     }
 }

@@ -30,6 +30,8 @@ public class IntroActivity extends AppCompatActivity{
     TextView foodTv;
     Typeface tf;
 
+    final String TAG = "IntroActivity";
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -53,35 +55,33 @@ public class IntroActivity extends AppCompatActivity{
             @Override
             public void run() {
                 final SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-                final String token = pref.getString("token", "NON");          //Get token when it is saved
+                final String token = pref.getString("token", "NON");                            // Get token when it is saved
                 AuthUserRquest recipeRequest = new AuthUserRquest(token, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject response) {       //Accpet Request is pass token check
+                    public void onResponse(JSONObject response) {                               // Accpet Request is pass token check
                         SharedPreferences.Editor editor = pref.edit();
                         try {
                             editor.putString("nickname", response.get("nickname").toString());
-                            editor.putString("email", response.get("email").toString());
-                            editor.putString("id",response.get("id").toString());
+                            editor.putString("email",    response.get("email").toString());
+                            editor.putString("id",       response.get("id").toString());
                             editor.commit();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.i("IntroActivity","Success");
-                        Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        Log.i(TAG, "Success");
+                        startActivity(new Intent(IntroActivity.this, MainActivity.class));      // Start Main Activity
                         finish();
                     }
                 }, new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {    //When Server status 401, Start Login Activity
+                    public void onErrorResponse(VolleyError error) {                            // When Server status 401,
                         Log.e("volley", error.toString());
-                        Intent intent = new Intent(IntroActivity.this, SignInActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(IntroActivity.this, SignInActivity.class));    // Start Login Activity
                         finish();
                     }
                 });
                 AppController.getInstance().addToRequestQueue(recipeRequest);
             }
-        }, 2000);                                                       //Timer 2000ms
+        }, 2000);                                                                               //Timer 2000ms
     }
 }

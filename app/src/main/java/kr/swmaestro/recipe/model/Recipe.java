@@ -5,42 +5,28 @@ package kr.swmaestro.recipe.model;
  */
 public class Recipe {
 
-    private String title;
-    private int id;
-    private String imageurl;
-    private String wasLike;
+    private String title;       // Recipe Title
+    private int id;             // Recipe Id
+    private String imageUrl;    // Recipe Thumbnail URL
+    private String wasLike;     // Like Id
 
-    public Recipe(String title, String id, String imageurl, String wasLike) {
+    public Recipe(String title, String id, String imageUrl, String wasLike) {
         this.title = title;
         this.id = Integer.parseInt(id);
-        this.imageurl = imageurl;
+        this.imageUrl = imageUrl;
         this.wasLike = wasLike;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
 
-    public int getItemId() {
-        return id;
-    }
+    public int getItemId() { return id; }
 
-    public String getImageurl() {
-        return imageurl;
-    }
+    public String getImageUrl() { return imageUrl; }
 
-    public String getWasLike(){
-        return wasLike;
-    }
+    public String getWasLike(){ return wasLike; }
 
-    public void setWasLike(String id){
-        this.wasLike = id;
-    }
+    public void setWasLike(String id){ this.wasLike = id; }
 
     @Override
-    public String toString() {
-        return id+"";
-    }
-
-
+    public String toString() { return id+""; }
 }

@@ -54,7 +54,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
         usernameEt = (EditText) findViewById(R.id.et_signup_username);
         emailEt = (EditText) findViewById(R.id.et_signup_email);
         passwordEt = (EditText) findViewById(R.id.et_signup_password);
@@ -73,37 +72,15 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (errorCk()) {
 
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-                    Request stringRequest = new SignUpRequest(mUsername, mEmail, mPassword, mNickname, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            HashMap<String, String> map = new ErrorMap();
-                            try {
-                                JSONObject json = new JSONObject(response);
-                                if (json.has("error")) {
-                                    Log.e("SignupError", json.get("error").toString());
-                                    Snackbar.make(coordinatorLayoutView, json.get("error").toString(), Snackbar.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT);
-                                    finish();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("Volley", "SignUp Request : " + error.networkResponse);
-                        }
-                    });
-                    queue.add(stringRequest);
+                    signUp(coordinatorLayoutView);
                 }
             }
         });
     }
 
+    /**
+     * Error Handler Method
+     */
     private boolean errorCk(){
         View coordinatorLayoutView = findViewById(R.id.sb_signup_snackbarposition);
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
@@ -135,6 +112,35 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void signUp(final View coordinatorLayoutView) {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        Request stringRequest = new SignUpRequest(mUsername, mEmail, mPassword, mNickname, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                HashMap<String, String> map = new ErrorMap();
+                try {
+                    JSONObject json = new JSONObject(response);
+                    if (json.has("error")) {
+                        Log.e("SignupError", json.get("error").toString());
+                        Snackbar.make(coordinatorLayoutView, json.get("error").toString(), Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_SHORT);
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", "SignUp Request : " + error.networkResponse);
+            }
+        });
+        queue.add(stringRequest);
     }
 
 }
