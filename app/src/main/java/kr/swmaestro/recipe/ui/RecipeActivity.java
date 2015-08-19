@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
@@ -104,8 +106,13 @@ public class RecipeActivity extends AppCompatActivity{
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String token = pref.getString("token", "NON");  // get Token
-        JsonObjectRequest recipeRequest = new JsonObjectRequest(Request.Method.GET, util.recipeUrl + "/" + id
-                , token, new Response.Listener<JSONObject>() {
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.GET+"");
+        request.put("url", util.recipeUrl + "/" + id);
+        request.put("token", token);
+
+        JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
@@ -129,7 +136,7 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadmethods() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id+"/methods"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "/" + id+"/methods"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -162,7 +169,7 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadThumnail(){
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, "http://recipe-main.herokuapp.com/recipes/" + id+"/methodThumbs"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "/" + id+"/methodThumbs"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

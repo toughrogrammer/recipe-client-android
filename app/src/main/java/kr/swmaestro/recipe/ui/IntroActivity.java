@@ -9,15 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
-import kr.swmaestro.recipe.Request.AuthUserRquest;
+import kr.swmaestro.recipe.Request.JsonObjectRequest;
+import kr.swmaestro.recipe.util.util;
 
 /**
  * Created by lk on 2015. 7. 31..
@@ -56,7 +60,13 @@ public class IntroActivity extends AppCompatActivity{
             public void run() {
                 final SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                 final String token = pref.getString("token", "NON");                            // Get token when it is saved
-                AuthUserRquest recipeRequest = new AuthUserRquest(token, new Response.Listener<JSONObject>() {
+
+                HashMap<String, String> request = new HashMap<>();
+                request.put("model", Request.Method.POST+"");
+                request.put("url", util.tokenUrl);
+                request.put("token", token);
+
+                JsonObjectRequest tokenRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {                               // Accpet Request is pass token check
                         SharedPreferences.Editor editor = pref.edit();
@@ -80,7 +90,7 @@ public class IntroActivity extends AppCompatActivity{
                         finish();
                     }
                 });
-                AppController.getInstance().addToRequestQueue(recipeRequest);
+                AppController.getInstance().addToRequestQueue(tokenRequest);
             }
         }, 2000);                                                                               //Timer 2000ms
     }

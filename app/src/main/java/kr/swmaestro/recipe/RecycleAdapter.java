@@ -18,12 +18,14 @@ import com.android.volley.toolbox.ImageLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
 import kr.swmaestro.recipe.Request.LikeRequest;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.ui.RecipeActivity;
+import kr.swmaestro.recipe.util.util;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -112,7 +114,12 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                     });
                     AppController.getInstance().addToRequestQueue(recipeRequest);
                 } else {
-                    JsonObjectRequest recipeRequest = new JsonObjectRequest(Request.Method.DELETE, "http://recipe-main.herokuapp.com/likes/" + recipe.getWasLike(), token, new Response.Listener<JSONObject>() {
+                    HashMap<String, String> request = new HashMap<String, String>();
+                    request.put("model", Request.Method.DELETE+"");
+                    request.put("url", util.likeUrl + "/" + recipe.getWasLike());
+                    request.put("token", token);
+
+                    JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.i("Cancel like", "Success");

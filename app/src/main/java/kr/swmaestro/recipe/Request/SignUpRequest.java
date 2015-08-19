@@ -32,8 +32,6 @@ public class SignUpRequest extends Request<String> {
         //mParams.put("gender", gender);
 
         listener = successListener;
-
-
     }
 
     @Override

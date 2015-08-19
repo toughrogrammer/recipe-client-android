@@ -7,4 +7,5 @@ public class util {
     final public static String serverUrl = "http://recipe-main.herokuapp.com";
     final public static String tokenUrl = serverUrl + "/auth/me";
     final public static String recipeUrl = serverUrl + "/recipes";
+    final public static String likeUrl = serverUrl + "/likes";
 }

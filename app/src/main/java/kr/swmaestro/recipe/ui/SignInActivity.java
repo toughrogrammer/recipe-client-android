@@ -124,7 +124,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", "SignUp Request : " + error.networkResponse);
+                Log.e("Volley", "SignIn Request : " + error.networkResponse);
             }
         });
         queue.add(stringRequest);

@@ -22,9 +22,9 @@ public class JsonObjectRequest extends Request<JSONObject>{
     private String token;
     private Response.Listener<JSONObject> listener;
 
-    public JsonObjectRequest(int model, String url, String token, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
-        super(model, url, errorListener);
-        this.token = token;
+    public JsonObjectRequest(HashMap<String, String> request, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        super(Integer.parseInt(request.get("model")), request.get("url"), errorListener);
+        this.token = request.get("token");
         listener = successListener;
     }
 
