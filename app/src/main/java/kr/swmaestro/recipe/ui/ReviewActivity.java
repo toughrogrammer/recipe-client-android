@@ -41,7 +41,9 @@ import kr.swmaestro.recipe.Request.ReviewRequest;
 import kr.swmaestro.recipe.Request.SignUpRequest;
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.model.Recipe;
+import kr.swmaestro.recipe.model.ReviewListData;
 import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
+import kr.swmaestro.recipe.util.ReviewListAdapter;
 import kr.swmaestro.recipe.util.util;
 
 public class ReviewActivity extends ActionBarActivity {
@@ -51,7 +53,7 @@ public class ReviewActivity extends ActionBarActivity {
     private String Username;
     private Button mRegisterBT;
     private String token;
-
+    public ArrayList<ReviewListData> reviewListData;
     private ProgressDialog progressDialog;
 
     private int count = 0;                                                  // Recipe number for more loading
@@ -71,15 +73,19 @@ public class ReviewActivity extends ActionBarActivity {
         mRegisterBT = (Button) findViewById(R.id.activity_review_registerBt);
         mRegisterBT.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         mCommentEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        reviewListData = new ArrayList<>();
 
+        ReviewListData data = new ReviewListData("username","comment","imgurl");
+        reviewListData.add(data);
+        ListView listView = (ListView) findViewById(R.id.activity_review_lv);
+        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);
+        listView.setAdapter(reviewListAdapter);
+        reviewListAdapter.notifyDataSetChanged();
         mRegisterBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Click.", Toast.LENGTH_SHORT).show();
-                //loadRecipeList();//
-                getPreferenceData();//load Username,Comment
 
-//                registerComment();
             }
         });
 
