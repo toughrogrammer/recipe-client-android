@@ -75,9 +75,10 @@ public class ReviewActivity extends ActionBarActivity {
         mRegisterBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Click.", Toast.LENGTH_SHORT);
-//                getPreferenceData();//load Username,Comment
-//                loadRecipeList();
+                Toast.makeText(getApplicationContext(), "Click.", Toast.LENGTH_SHORT).show();
+                //loadRecipeList();//
+                getPreferenceData();//load Username,Comment
+
 //                registerComment();
             }
         });
@@ -91,75 +92,75 @@ public class ReviewActivity extends ActionBarActivity {
         token = pref.getString("token", "NON");             // get Token
     }
 
-    private void loadRecipeList() {
-        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "?limit=" + recipeRecallCount + "&skip=" + count, token, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                hideprograssDialog();
-                ArrayList<HashMap<String, String>> ReviewList = new ArrayList<HashMap<String, String>>(2);
+//    private void loadRecipeList() {
+//        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "?limit=" + recipeRecallCount + "&skip=" + count, token, new Response.Listener<JSONArray>() {
+//            @Override
+//            public void onResponse(JSONArray response) {
+//                hideprograssDialog();
+//                ArrayList<HashMap<String, String>> ReviewList = new ArrayList<HashMap<String, String>>(2);
+//
+//                for (int i = 0; i < response.length(); i++) {
+//                    try {
+//                        JSONObject jsonObject = response.getJSONObject(i);
+//
+//                        HashMap<String,String> reviewmap = new HashMap<String,String>();
+//
+//                        Username = jsonObject.getString("username");
+//                        Comment = jsonObject.getString("comment");
+//
+//                        reviewmap.put(Username,i+"");
+//                        reviewmap.put(Comment,i+"");
+//
+//                        ReviewList.add(reviewmap);
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                count += 15;
+//                String [] from = {"name","comment"};
+//                int[] to = {android.R.id.text1, android.R.id.text2};
+//
+//                SimpleAdapter simpleAdapter = new SimpleAdapter(getApplicationContext(), ReviewList,android.R.layout.simple_expandable_list_item_2,from,to);
+//                mListView.setAdapter(simpleAdapter);
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("volley", error.toString());
+//            }
+//        });
+//        AppController.getInstance().addToRequestQueue(reviewRequest);
+//    }
 
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
 
-                        HashMap<String,String> reviewmap = new HashMap<String,String>();
-
-                        Username = jsonObject.getString("username");
-                        Comment = jsonObject.getString("comment");
-
-                        reviewmap.put(Username,i+"");
-                        reviewmap.put(Comment,i+"");
-
-                        ReviewList.add(reviewmap);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                count += 15;
-                String [] from = {"name","comment"};
-                int[] to = {android.R.id.text1, android.R.id.text2};
-
-                SimpleAdapter simpleAdapter = new SimpleAdapter(getApplicationContext(), ReviewList,android.R.layout.simple_expandable_list_item_2,from,to);
-                mListView.setAdapter(simpleAdapter);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("volley", error.toString());
-            }
-        });
-        AppController.getInstance().addToRequestQueue(reviewRequest);
-    }
-
-
-    private void registerComment() {
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-        Request stringRequest = new ReviewRequest(Username, Comment, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                HashMap<String, String> map = new ErrorMap();
-                try {
-                    JSONObject json = new JSONObject(response);
-                    if (json.has("error")) {
-                        Log.e("CommentError", json.get("error").toString());
-                    } else {
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", "Reiveiw Request : " + error.networkResponse);
-            }
-        });
-        queue.add(stringRequest);
-    }
+//    private void registerComment() {
+//        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//
+//        Request stringRequest = new ReviewRequest(Username, Comment, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                HashMap<String, String> map = new ErrorMap();
+//                try {
+//                    JSONObject json = new JSONObject(response);
+//                    if (json.has("error")) {
+//                        Log.e("CommentError", json.get("error").toString());
+//                    } else {
+//                        finish();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("Volley", "Reiveiw Request : " + error.networkResponse);
+//            }
+//        });
+//        queue.add(stringRequest);
+//    }
 //    private void loadUsername() {
 //
 //        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
