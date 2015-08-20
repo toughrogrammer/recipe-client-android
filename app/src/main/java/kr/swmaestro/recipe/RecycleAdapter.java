@@ -100,7 +100,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                     request.put("url", AppSetting.likeUrl);
                     request.put("token", token);
                     request.put("recipe", id+"");
-                    request.put("userid", userid);
+                    request.put("user", userid);
 
                     JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
                         @Override
