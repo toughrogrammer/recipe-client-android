@@ -13,6 +13,7 @@ public class AppSetting {
     final public static String recipeUrl = serverUrl + "/recipes";
     final public static String likeUrl = serverUrl + "/likes";
     final public static String viewUrl = serverUrl + "/views";
+    final public static String reviewUrl = serverUrl + "/reviews";
 
     /**
      * Font Setting

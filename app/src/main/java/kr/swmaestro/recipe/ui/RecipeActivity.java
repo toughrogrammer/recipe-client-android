@@ -86,6 +86,7 @@ public class RecipeActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RecipeActivity.this, ReviewActivity.class);
+                intent.putExtra("recipeid", id);
                 startActivity(intent);
             }
         });

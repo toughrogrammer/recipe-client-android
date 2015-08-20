@@ -1,6 +1,7 @@
 package kr.swmaestro.recipe.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
@@ -37,12 +38,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
-import kr.swmaestro.recipe.Request.ReviewRequest;
-import kr.swmaestro.recipe.Request.SignUpRequest;
-import kr.swmaestro.recipe.model.ErrorMap;
-import kr.swmaestro.recipe.model.Recipe;
-import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
-import kr.swmaestro.recipe.util.util;
+import kr.swmaestro.recipe.util.AppSetting;
 
 public class ReviewActivity extends ActionBarActivity {
     private ListView mListView;
@@ -51,6 +47,8 @@ public class ReviewActivity extends ActionBarActivity {
     private String Username;
     private Button mRegisterBT;
     private String token;
+    private String userid;
+    private String recipeId;
 
     private ProgressDialog progressDialog;
 
@@ -62,10 +60,15 @@ public class ReviewActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
+        getPreferenceData();
         init();
     }
 
     private void init() {
+
+        Intent intent = getIntent();
+        recipeId = intent.getStringExtra("recipeid");
+
         mListView = (ListView) findViewById(R.id.activity_review_lv);
         mCommentEt = (EditText) findViewById(R.id.activity_review_commentET);
         mRegisterBT = (Button) findViewById(R.id.activity_review_registerBt);
@@ -75,10 +78,7 @@ public class ReviewActivity extends ActionBarActivity {
         mRegisterBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Click.", Toast.LENGTH_SHORT);
-//                getPreferenceData();//load Username,Comment
-//                loadRecipeList();
-//                registerComment();
+                registerComment(mCommentEt.getText().toString());
             }
         });
 
@@ -89,10 +89,11 @@ public class ReviewActivity extends ActionBarActivity {
         Username = pref.getString("useranme","testname");   // get Email
         Comment = pref.getString("comment","hellow");       // get Comment
         token = pref.getString("token", "NON");             // get Token
+        this.userid = pref.getString("id", "NON");      // get userId
     }
 
     private void loadRecipeList() {
-        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "?limit=" + recipeRecallCount + "&skip=" + count, token, new Response.Listener<JSONArray>() {
+        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "?limit=" + recipeRecallCount + "&skip=" + count, token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
@@ -134,23 +135,22 @@ public class ReviewActivity extends ActionBarActivity {
     }
 
 
-    private void registerComment() {
+    private void registerComment(String content) {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-        Request stringRequest = new ReviewRequest(Username, Comment, new Response.Listener<String>() {
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.POST+"");
+        request.put("url", AppSetting.reviewUrl);
+        request.put("token", token);
+        request.put("author", userid);
+        request.put("recipe", recipeId);
+        request.put("content", content);
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                HashMap<String, String> map = new ErrorMap();
-                try {
-                    JSONObject json = new JSONObject(response);
-                    if (json.has("error")) {
-                        Log.e("CommentError", json.get("error").toString());
-                    } else {
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(JSONObject response) {
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -158,7 +158,8 @@ public class ReviewActivity extends ActionBarActivity {
                 Log.e("Volley", "Reiveiw Request : " + error.networkResponse);
             }
         });
-        queue.add(stringRequest);
+
+        queue.add(jsonObjectRequest);
     }
 //    private void loadUsername() {
 //

@@ -109,7 +109,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     if(json.has("accessToken")) {                                               // if Sign_in Success
                         editor.putString("token", json.get("accessToken").toString());          // save accessToken
                         editor.commit();
-                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                        startActivity(new Intent(SignInActivity.this, IntroActivity.class));
                         finish();
                     }
                     else                                                                        // else show snackBar

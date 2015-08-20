@@ -1,5 +1,7 @@
 package kr.swmaestro.recipe.Request;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -29,6 +31,7 @@ public class JsonObjectRequest extends Request<JSONObject>{
         listener = successListener;
 
         if(request.get("model").equals(Method.POST+"")) {
+            Log.i("post", "post");
             mParams = request;
             mParams.remove("model");
             mParams.remove("url");
