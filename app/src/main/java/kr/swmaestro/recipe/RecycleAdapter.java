@@ -26,7 +26,7 @@ import java.util.List;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.ui.RecipeActivity;
-import kr.swmaestro.recipe.util.util;
+import kr.swmaestro.recipe.util.AppSetting;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -99,7 +99,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                 if (recipe.getWasLike().equals("")) {                                       // was not Like item
                     HashMap<String, String> request = new HashMap<>();
                     request.put("model", Request.Method.POST+"");
-                    request.put("url", util.likeUrl);
+                    request.put("url", AppSetting.likeUrl);
                     request.put("token", token);
                     request.put("recipe", id+"");
                     request.put("user", userid);
@@ -126,7 +126,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                 } else {
                     HashMap<String, String> request = new HashMap<>();
                     request.put("model", Request.Method.DELETE+"");
-                    request.put("url", util.likeUrl + "/" + recipe.getWasLike());
+                    request.put("url", AppSetting.likeUrl + "/" + recipe.getWasLike());
                     request.put("token", token);
 
                     JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {

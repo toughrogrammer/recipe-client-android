@@ -6,15 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -36,7 +30,7 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
-import kr.swmaestro.recipe.util.util;
+import kr.swmaestro.recipe.util.AppSetting;
 
 /**
  * Created by lk on 2015. 8. 15..
@@ -54,9 +48,12 @@ public class RecipeActivity extends AppCompatActivity{
     //보관일 expire (int)
     //title
     //id
+
+    //todo Refactoring
     private TextView tvMethods;
-    private String id;
-    private String token;
+    private String id;              // RecipeID
+    private String token;           // UserToken
+    private String userid;          // UserID
     private LinearLayout layout;
     private String title;
     private TextView Tv_title;
@@ -72,8 +69,10 @@ public class RecipeActivity extends AppCompatActivity{
         context = this;
         init();
         loadrecipe();
+        getPreferenceData();
         loadmethods();
         loadThumnail();
+        sendViewEvent();
     }
 
     private void init() {
@@ -88,30 +87,32 @@ public class RecipeActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RecipeActivity.this, ReviewActivity.class);
+                intent.putExtra("recipeid", id);
                 startActivity(intent);
             }
         });
 
-        id = intent.getStringExtra("id")+"";
-        token = pref.getString("token", "NON");  // get Token
+        id = intent.getStringExtra("id")+"";            // get recipeId
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
         layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail2);
 
     }
 
+    public void getPreferenceData() {
+        SharedPreferences pref = context.getSharedPreferences("pref", 0);
+        this.token = pref.getString("token", "NON");    // get Token
+        this.userid = pref.getString("id", "NON");      // get userId
+    }
+
     private void loadrecipe() {
 
-        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothic.ttf"));
+        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
         Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
 
-
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        String token = pref.getString("token", "NON");  // get Token
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
-        request.put("url", util.recipeUrl + "/" + id);
+        request.put("url", AppSetting.recipeUrl + "/" + id);
         request.put("token", token);
 
 
@@ -126,7 +127,7 @@ public class RecipeActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
                 Tv_title.setText(title);
-                Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+                Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -139,7 +140,7 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadmethods() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "/" + id+"/methods"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "/" + id+"/methods"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -172,7 +173,7 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadThumnail(){
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, util.recipeUrl + "/" + id+"/methodThumbs"
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "/" + id+"/methodThumbs"
                 , token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -208,5 +209,31 @@ public class RecipeActivity extends AppCompatActivity{
         });
 
         AppController.getInstance().addToRequestQueue(recipeRequest);
+    }
+
+    private void sendViewEvent(){
+
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.POST+"");
+        request.put("url", AppSetting.viewUrl);
+        request.put("token", token);
+        request.put("recipe", id+"");
+        request.put("user", userid);
+
+        JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ViewEvent", "Success");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("volley", error.toString());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(recipeRequest);
+
     }
 }
