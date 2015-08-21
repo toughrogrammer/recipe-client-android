@@ -4,21 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,7 +33,9 @@ import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
+import kr.swmaestro.recipe.model.ReviewListData;
 import kr.swmaestro.recipe.util.AppSetting;
+import kr.swmaestro.recipe.util.ReviewListAdapter;
 
 public class ReviewActivity extends ActionBarActivity {
     private ListView mListView;
@@ -47,6 +44,7 @@ public class ReviewActivity extends ActionBarActivity {
     private String Username;
     private Button mRegisterBT;
     private String token;
+    public ArrayList<ReviewListData> reviewListData;
     private String userid;
     private String recipeId;
 
@@ -75,7 +73,14 @@ public class ReviewActivity extends ActionBarActivity {
         mRegisterBT = (Button) findViewById(R.id.activity_review_registerBt);
         mRegisterBT.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         mCommentEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        reviewListData = new ArrayList<>();
 
+        ReviewListData data = new ReviewListData("username","comment","imgurl");
+        reviewListData.add(data);
+        ListView listView = (ListView) findViewById(R.id.activity_review_lv);
+        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);
+        listView.setAdapter(reviewListAdapter);
+        reviewListAdapter.notifyDataSetChanged();
         mRegisterBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +97,7 @@ public class ReviewActivity extends ActionBarActivity {
         token = pref.getString("token", "NON");             // get Token
         this.userid = pref.getString("id", "NON");      // get userId
     }
+
 
     private void loadRecipeList() {
 
