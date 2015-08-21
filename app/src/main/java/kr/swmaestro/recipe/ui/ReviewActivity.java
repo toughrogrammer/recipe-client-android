@@ -62,6 +62,7 @@ public class ReviewActivity extends ActionBarActivity {
 
         getPreferenceData();
         init();
+        loadRecipeList();
     }
 
     private void init() {
@@ -94,7 +95,7 @@ public class ReviewActivity extends ActionBarActivity {
 
     private void loadRecipeList() {
 
-        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.reviewUrl, token, new Response.Listener<JSONArray>() {
+        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl  + "/" + 1 + "/reviews", token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
@@ -104,15 +105,21 @@ public class ReviewActivity extends ActionBarActivity {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
 
-                        HashMap<String,String> reviewmap = new HashMap<String,String>();
+                        JSONObject author = jsonObject.getJSONObject("author");
+                        Log.i("username" , author.getString("nickname"));
 
-                        Username = jsonObject.getString("username");
-                        Comment = jsonObject.getString("comment");
+                        Log.i("conent", jsonObject.getString("content"));
 
-                        reviewmap.put(Username,i+"");
-                        reviewmap.put(Comment,i+"");
 
-                        ReviewList.add(reviewmap);
+//                        HashMap<String,String> reviewmap = new HashMap<String,String>();
+//
+//                        Username = jsonObject.getString("username");
+//                        Comment = jsonObject.getString("comment");
+//
+//                        reviewmap.put(Username,i+"");
+//                        reviewmap.put(Comment,i+"");
+//
+//                        ReviewList.add(reviewmap);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
