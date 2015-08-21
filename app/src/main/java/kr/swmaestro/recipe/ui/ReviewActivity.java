@@ -53,6 +53,8 @@ public class ReviewActivity extends ActionBarActivity {
     private int count = 0;                                                  // Recipe number for more loading
     private int recipeRecallCount = 15;
 
+    private ReviewListAdapter reviewListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +77,8 @@ public class ReviewActivity extends ActionBarActivity {
         mCommentEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         reviewListData = new ArrayList<>();
 
-        ReviewListData data = new ReviewListData("username","comment","imgurl");
-        reviewListData.add(data);
         ListView listView = (ListView) findViewById(R.id.activity_review_lv);
-        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);
+        reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);
         listView.setAdapter(reviewListAdapter);
         reviewListAdapter.notifyDataSetChanged();
         mRegisterBT.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +116,7 @@ public class ReviewActivity extends ActionBarActivity {
 
                         Log.i("conent", jsonObject.getString("content"));
 
-
+                        ReviewListData data = new ReviewListData(author.getString("nickname"),jsonObject.getString("content"),"imgurl");
 //                        HashMap<String,String> reviewmap = new HashMap<String,String>();
 //
 //                        Username = jsonObject.getString("username");
@@ -126,18 +126,13 @@ public class ReviewActivity extends ActionBarActivity {
 //                        reviewmap.put(Comment,i+"");
 //
 //                        ReviewList.add(reviewmap);
-
+                        reviewListData.add(data);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                count += 15;
-                String [] from = {"name","comment"};
-                int[] to = {android.R.id.text1, android.R.id.text2};
 
-                SimpleAdapter simpleAdapter = new SimpleAdapter(getApplicationContext(), ReviewList,android.R.layout.simple_expandable_list_item_2,from,to);
-                mListView.setAdapter(simpleAdapter);
-
+                reviewListAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
