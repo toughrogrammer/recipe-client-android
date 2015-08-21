@@ -93,7 +93,8 @@ public class ReviewActivity extends ActionBarActivity {
     }
 
     private void loadRecipeList() {
-        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "?limit=" + recipeRecallCount + "&skip=" + count, token, new Response.Listener<JSONArray>() {
+
+        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.reviewUrl, token, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
@@ -161,32 +162,6 @@ public class ReviewActivity extends ActionBarActivity {
 
         queue.add(jsonObjectRequest);
     }
-//    private void loadUsername() {
-//
-//        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-//        String token = pref.getString("token", "NON");  // get Token
-//
-//        HashMap<String, String> request = new HashMap<>();
-//
-//        JsonObjectRequest reviewRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//
-//                Log.i("test", response.toString());
-//                try {
-//                    Username = response.getString("username");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("volley", error.toString());
-//            }
-//        });
-//        AppController.getInstance().addToRequestQueue(reviewRequest);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
