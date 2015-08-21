@@ -29,9 +29,9 @@ import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.Request.SignInRequest;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import kr.swmaestro.recipe.helper.MakeBlurHelper;
+import kr.swmaestro.recipe.util.AppSetting;
 
 /**
  * Created by lk on 2015. 7. 31..
@@ -69,7 +69,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Bitmap blurImage = MakeBlurHelper.makeBlur(getApplicationContext(), getBitmapFromDrawable(), 1);
         bgImageView.setImageBitmap(blurImage);
 
-        tf = Typeface.createFromAsset(getAssets(),"Nanumbut.ttf");
+        tf = Typeface.createFromAsset(getAssets(), AppSetting.logoFont);
         myTv = (TextView) findViewById(R.id.activity_signin_my_tx);
         myTv.setTypeface(tf,Typeface.BOLD);
 
@@ -77,15 +77,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         foodTv.setTypeface(tf,Typeface.BOLD);
 
         emailEt = (EditText) findViewById(R.id.et_signin_email);
-        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        emailEt.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
         passwordEt = (EditText) findViewById(R.id.et_signin_password);
-        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        passwordEt.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
         Button signInBt = (Button) findViewById(R.id.bt_signin_signin);
         Button signUpBt = (Button) findViewById(R.id.bt_signin_signup);
 
-        signUpBt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
+        signUpBt.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
         signInBt.setOnClickListener(this);
         signUpBt.setOnClickListener(this);
 
@@ -109,7 +109,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     if(json.has("accessToken")) {                                               // if Sign_in Success
                         editor.putString("token", json.get("accessToken").toString());          // save accessToken
                         editor.commit();
-                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                        startActivity(new Intent(SignInActivity.this, IntroActivity.class));
                         finish();
                     }
                     else                                                                        // else show snackBar
