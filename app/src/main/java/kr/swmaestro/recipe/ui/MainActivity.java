@@ -3,6 +3,7 @@ package kr.swmaestro.recipe.ui;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,11 +16,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -30,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity{
     private String token;
     private TextView mEmailTv;                                          // TextView in drawer to show the Email
     private TextView mNickTv;                                           // TextView in drawer to show the Nickname
-
+    private Button mLikeBtn;
     private ProgressDialog progressDialog;
 
     private int count = 0;                                                  // Recipe number for more loading
@@ -100,6 +106,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+
     private void initNavtigationView() {
 
         mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
@@ -113,7 +120,7 @@ public class MainActivity extends AppCompatActivity{
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.setDrawerListener(drawerToggle);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
-
+        makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
         mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -135,9 +142,12 @@ public class MainActivity extends AppCompatActivity{
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
 
         NavigationView nv = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         nv.setNavigationItemSelectedListener(
@@ -157,8 +167,10 @@ public class MainActivity extends AppCompatActivity{
         visibleprogress();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mLikeBtn = (Button) findViewById(R.id.bt_recycle_like);
         mRecyclerView.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
+
 
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -174,6 +186,7 @@ public class MainActivity extends AppCompatActivity{
                 loadRecipeList();
             }
         });
+
     }
 
     @Override
@@ -253,7 +266,19 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+    private void makeCollapsingToolbarLayoutLooksGood(CollapsingToolbarLayout collapsingToolbarLayout) {
+        try {
+            final Field field = collapsingToolbarLayout.getClass().getDeclaredField("mCollapsingTextHelper");
+            field.setAccessible(true);
 
+            final Object object = field.get(collapsingToolbarLayout);
+            final Field tpf = object.getClass().getDeclaredField("mTextPaint");
+            tpf.setAccessible(true);
+
+            ((TextPaint) tpf.get(object)).setTypeface(Typeface.createFromAsset(getAssets(), "Yoon.ttf"));
+        } catch (Exception ignored) {
+        }
+    }
     private void hideprograssDialog() {
         if (progressDialog != null) {
             progressDialog.dismiss();

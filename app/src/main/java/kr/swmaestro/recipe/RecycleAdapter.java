@@ -1,9 +1,11 @@
 package kr.swmaestro.recipe;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
 
     private String token;
     private String userid;
+    private int likeFlage = 0;
 
     public RecycleAdapter(List<Recipe> item, Context context) {
         mImageLoader = AppController.getInstance().getImageLoader();
@@ -86,7 +89,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
 
         holder.mRecycleHolder.mTitle.setText(recipe.getTitle());
         holder.mRecycleHolder.mImage.setImageUrl(recipe.getImageUrl(), mImageLoader);
-
+        holder.mRecycleHolder.mTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), "NanumBarunGothic.ttf"));
         if(!recipe.getWasLike().equals(""))                                                 // if wasLike
             holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);                     // set Like Button wasLike
         holder.mRecycleHolder.mlikeButton.setOnClickListener(new View.OnClickListener() {
@@ -94,13 +97,12 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
             public void onClick(View v) {
                 int id = recipe.getItemId();
                 if (recipe.getWasLike().equals("")) {                                       // was not Like item
-
                     HashMap<String, String> request = new HashMap<>();
                     request.put("model", Request.Method.POST+"");
                     request.put("url", util.likeUrl);
                     request.put("token", token);
                     request.put("recipe", id+"");
-                    request.put("userid", userid);
+                    request.put("user", userid);
 
                     JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
                         @Override
@@ -108,6 +110,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                             Log.i("like", "Success");
                             try {
                                 holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);
+                                holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));
                                 recipe.setWasLike(response.getString("id"));                // save Like id
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -131,6 +134,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                         public void onResponse(JSONObject response) {
                             Log.i("Cancel like", "Success");
                             holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLACK);
+                            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_dislike));
                             recipe.setWasLike("");                                          // delete Like id
                         }
                     }, new Response.ErrorListener() {

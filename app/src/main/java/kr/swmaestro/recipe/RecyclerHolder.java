@@ -1,8 +1,11 @@
 package kr.swmaestro.recipe;
 
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -29,6 +32,7 @@ public class RecyclerHolder extends RecyclerView.ViewHolder {
     private void setHolder(View itemView) {
         mRecycleHolder = new RecycleHolder();
         mRecycleHolder.mTitle = (TextView) itemView.findViewById(R.id.tv_recycle_title);
+        //mRecycleHolder.mTitle.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         mRecycleHolder.mImage = (NetworkImageView) itemView.findViewById(R.id.nv_recycle_image);
         mRecycleHolder.mlikeButton = (Button) itemView.findViewById(R.id.bt_recycle_like);
     }
