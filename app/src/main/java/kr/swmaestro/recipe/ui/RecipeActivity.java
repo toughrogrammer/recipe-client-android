@@ -106,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity{
 
     private void loadrecipe() {
 
-        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
+        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont));
 
         Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
 

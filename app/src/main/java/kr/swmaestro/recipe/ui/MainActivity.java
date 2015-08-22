@@ -117,10 +117,13 @@ public class MainActivity extends AppCompatActivity{
         mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
         mNickTv.setText(Nickname);
 
+        //드로어를 여는 버튼에 애니메이션 효과를 적용함
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.setDrawerListener(drawerToggle);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
+        //collapsingToolbarLayout
         makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
+        //드로어에 있는 아이템들의 폰트를 바꿔줌
         mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -266,6 +269,7 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+    //CollapsingToolbarLayout 폰트설정
     private void makeCollapsingToolbarLayoutLooksGood(CollapsingToolbarLayout collapsingToolbarLayout) {
         try {
             final Field field = collapsingToolbarLayout.getClass().getDeclaredField("mCollapsingTextHelper");

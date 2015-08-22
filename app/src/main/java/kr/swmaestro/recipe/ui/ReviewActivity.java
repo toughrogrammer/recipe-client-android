@@ -76,6 +76,7 @@ public class ReviewActivity extends ActionBarActivity {
 
         ReviewListData data = new ReviewListData("username","comment","imgurl");
         reviewListData.add(data);
+        reviewListData.add(data);
         ListView listView = (ListView) findViewById(R.id.activity_review_lv);
         ReviewListAdapter reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);
         listView.setAdapter(reviewListAdapter);
