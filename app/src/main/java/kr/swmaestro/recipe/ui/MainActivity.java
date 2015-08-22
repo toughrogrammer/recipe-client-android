@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.Menu;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity{
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //이걸해줘야 폰트적용됨
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
 
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity{
         mLikeBtn = (Button) findViewById(R.id.bt_recycle_like);
         mRecyclerView.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
+        swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
 
 
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -191,6 +194,20 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+    //리사이클 뷰 좌우로 스크롤해서 없애기(dismiss)
+    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            list.remove(viewHolder.getAdapterPosition());
+            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+        }
+    });
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
