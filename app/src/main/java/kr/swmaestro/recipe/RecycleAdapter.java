@@ -76,6 +76,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), RecipeActivity.class);
                 intent.putExtra("id",list.get(position).getItemId()+"");
+                intent.putExtra("title", list.get(position).getTitle());
                 intent.putExtra("titleThumbnail", list.get(position).getImageUrl());
                 view.getContext().startActivity(intent);
             }
@@ -92,13 +93,13 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
         holder.mRecycleHolder.mTitle.setText(recipe.getTitle());
         holder.mRecycleHolder.mImage.setImageUrl(recipe.getImageUrl(), mImageLoader);
         holder.mRecycleHolder.mTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), "NanumBarunGothic.ttf"));
-        if(!recipe.getWasLike().equals(""))                                                 // if wasLike
-            holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);                     // set Like Button wasLike
+        if(recipe.getWasLike().equals("false"))                                                 // if wasLike
+            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_dislike));                    // set Like Button wasLike
         holder.mRecycleHolder.mlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int recipeid = recipe.getItemId();
-                if (recipe.getWasLike().equals("")) {                                       // was not Like item
+                if (recipe.getWasLike().equals("false")) {                                       // was not Like item
                     HashMap<String, String> request = new HashMap<>();
                     request.put("model", Request.Method.POST+"");
                     request.put("url", AppSetting.recipeUrl + "/" + recipeid + "/likes");
@@ -108,7 +109,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.i("like", "Success");
-                            holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);
                             holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));
                             recipe.setWasLike("true");                // save Like id
                         }
@@ -129,7 +129,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.i("Cancel like", "Success");
-                            holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLACK);
                             holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_dislike));
                             recipe.setWasLike("");                                          // delete Like id
                         }

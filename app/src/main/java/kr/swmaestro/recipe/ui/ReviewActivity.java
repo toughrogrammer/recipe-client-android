@@ -77,6 +77,7 @@ public class ReviewActivity extends ActionBarActivity {
         mCommentEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
 
         ListView listView = (ListView) findViewById(R.id.activity_review_lv);
+        reviewListData = new ArrayList<>();
         reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);
         listView.setAdapter(reviewListAdapter);
         reviewListAdapter.notifyDataSetChanged();
@@ -102,7 +103,7 @@ public class ReviewActivity extends ActionBarActivity {
 
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
-        request.put("url", AppSetting.recipeUrl  + "/" + 1 + "/reviews");
+        request.put("url", AppSetting.recipeUrl  + "/" + recipeId + "/reviews");
         request.put("token", token);
 
         JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(request, new Response.Listener<JSONArray>() {
@@ -160,7 +161,7 @@ public class ReviewActivity extends ActionBarActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley", "Reiveiw Request : " + error.networkResponse);
+                Log.e("Volley", "Reiveiw Request : " + error.networkResponse.data.toString());
             }
         });
 

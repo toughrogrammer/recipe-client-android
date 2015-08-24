@@ -35,7 +35,7 @@ import kr.swmaestro.recipe.util.AppSetting;
  * Created by lk on 2015. 8. 15..
  */
 public class RecipeActivity extends AppCompatActivity{
-    //식감  feelings []
+    //식감  Feelings []
     //조리방법 methods []
     //조리과정이미지 methodThumbs {thumbnail {reference} }
     //카테고리 category { label }
@@ -67,7 +67,6 @@ public class RecipeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_receipe);
         context = this;
         init();
-        loadrecipe();
         getPreferenceData();
         loadmethods();
         loadThumnail();
@@ -92,8 +91,14 @@ public class RecipeActivity extends AppCompatActivity{
         });
 
         id = intent.getStringExtra("id")+"";            // get recipeId
+        title = intent.getStringExtra("title");         // get recipeName
         tvMethods = (TextView) findViewById(R.id.tv_recipe_methods);
         layout = (LinearLayout) findViewById(R.id.ll_recipe_methodThumnail2);
+
+        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont));
+        Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
+        Tv_title.setText(title);
+        Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
 
     }
 
@@ -103,40 +108,6 @@ public class RecipeActivity extends AppCompatActivity{
         this.userid = pref.getString("id", "NON");      // get userId
     }
 
-    private void loadrecipe() {
-
-        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont));
-
-        Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
-
-        HashMap<String, String> request = new HashMap<>();
-        request.put("model", Request.Method.GET+"");
-        request.put("url", AppSetting.recipeUrl + "/" + id);
-        request.put("token", token);
-
-
-        JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                Log.i("test", response.toString());
-                try {
-                    title = response.getString("title");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Tv_title.setText(title);
-                Tv_title.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("volley", error.toString());
-            }
-        });
-
-        AppController.getInstance().addToRequestQueue(recipeRequest);
-    }
 
     private void loadmethods() {
 

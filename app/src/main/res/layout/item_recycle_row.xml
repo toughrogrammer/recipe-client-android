@@ -28,7 +28,7 @@
                 <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/nv_recycle_image"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY" />
