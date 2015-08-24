@@ -29,7 +29,6 @@ public class SignUpRequest extends Request<String> {
         mParams.put("password", password);
         mParams.put("nickname", nickname);
         mParams.put("device","android");
-        //mParams.put("gender", gender);
 
         listener = successListener;
     }

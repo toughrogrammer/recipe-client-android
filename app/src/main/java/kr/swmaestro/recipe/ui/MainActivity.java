@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -27,6 +28,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -45,6 +48,8 @@ import java.util.List;
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecycleAdapter;
+import kr.swmaestro.recipe.model.Category;
+import kr.swmaestro.recipe.model.Feelings;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.util.EndlessRecyclerOnScrollListener;
@@ -75,33 +80,45 @@ public class MainActivity extends AppCompatActivity{
     private Button mLikeBtn;
     private ProgressDialog progressDialog;
 
+    private CheckBox[] mfeelCheckBoxs;
+    private CheckBox[] mCategoryCheckBoxs;
+    private Dialog mFeelDialog;
+    private Dialog mCategoryDialog;
+    private ArrayList<String> nowfeelings;
+    private ArrayList<Integer> nowcategories;
+    private Feelings feelings;
+    private Category categories;
+    private String feel;                                                // Feeling Select Option    ex) ?where{"feelings":[]}
+    private String category;                                            // Category Select Option   ex) ?where{"categories":[]}
+
     private int count = 0;                                              // Recipe number for more loading
     private int recipeRecallCount = 15;                                 // Recipe number recall a time
-
-    private final String TAG = "MainActivity";
-
-    private CheckBox[] mCheckBoxs;
-    private Dialog mMainDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.getPreferenceData();
+        this.initData();
         this.initToolbar();
         this.initNavtigationView();
         this.initListView();
     }
 
-    public void getPreferenceData() {
+    public void initData() {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         Email = pref.getString("email","test@gmail.com");   // get Email
-        Nickname = pref.getString("nickname","Test");       // get Nickname
+        Nickname = pref.getString("nickname", "Test");       // get Nickname
         token = pref.getString("token", "NON");             // get Token
-        mMainDialog = createDialog();
-        mMainDialog.show();
-        Log.i("token", token);
+
+        feelings = new Feelings();
+        categories = new Category();
+        nowfeelings = feelings.getFeels();
+        feel = "";
+        category = "";
+
+        mFeelDialog = createDialog();
+        mCategoryDialog = createDialog2();
     }
 
     private void initToolbar() {
@@ -158,7 +175,6 @@ public class MainActivity extends AppCompatActivity{
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //이걸해줘야 폰트적용됨
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
 
@@ -170,6 +186,10 @@ public class MainActivity extends AppCompatActivity{
                         if (menuItem.isCheckable()) {
                             menuItem.setChecked(true);
                         }
+                        if(menuItem.getTitle().equals("식감선택"))
+                            mFeelDialog.show();
+                        else if(menuItem.getTitle().equals("카테고리선택"))
+                            mCategoryDialog.show();
                         drawer.closeDrawers();
                         return true;
                     }
@@ -183,15 +203,16 @@ public class MainActivity extends AppCompatActivity{
         mLikeBtn = (Button) findViewById(R.id.bt_recycle_like);
         mRecyclerView.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
-        swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
-
 
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
         loadRecipeList();
+        addViewListener();
+    }
 
+    private void addViewListener() {
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -200,22 +221,7 @@ public class MainActivity extends AppCompatActivity{
                 loadRecipeList();
             }
         });
-
     }
-    //리사이클 뷰 좌우로 스크롤해서 없애기(dismiss)
-    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            list.remove(viewHolder.getAdapterPosition());
-            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-        }
-    });
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -229,8 +235,6 @@ public class MainActivity extends AppCompatActivity{
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-
-
     private void visibleprogress() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading....");
@@ -238,21 +242,19 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void loadRecipeList() {
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
-        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count);
+        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count+"&where={"+ feel + category+"}");
         request.put("token", token);
+
+        Log.i("url", request.get("url"));
 
         JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(request,new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
-                hideprograssDialog();                                                      // Hide PrograssDialog at the end of the recipe loaded
-
                 String imgUrl = "";
                 String wasLiked = "";
-
 
                 for (int i = 0; i < response.length(); i++) {
                     try {
@@ -262,7 +264,9 @@ public class MainActivity extends AppCompatActivity{
                             imgUrl = imginfo.getString("reference");
                         }
                         if (jsonObject.has("wasLiked"))                                   // Set Like id
-                            wasLiked = jsonObject.getString("wasLiked");
+                            wasLiked = "true";
+                        else
+                            wasLiked = "false";
                         Recipe recipe = new Recipe(jsonObject.getString("title"), jsonObject.getString("id"), imgUrl, wasLiked);
                         // Recipe Title, Recipe id, Recipe Thumbnail img URL, Like id
                         list.add(recipe);
@@ -272,16 +276,17 @@ public class MainActivity extends AppCompatActivity{
                 }
                 count += 15;
                 mAdapter.notifyDataSetChanged();
+                hideprograssDialog();                                                      // Hide PrograssDialog at the end of the recipe loaded
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("volley", error.toString());
+                hideprograssDialog();
             }
         });
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -293,7 +298,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_settings:
                 return true;
@@ -308,7 +312,6 @@ public class MainActivity extends AppCompatActivity{
         try {
             final Field field = collapsingToolbarLayout.getClass().getDeclaredField("mCollapsingTextHelper");
             field.setAccessible(true);
-
             final Object object = field.get(collapsingToolbarLayout);
             final Field tpf = object.getClass().getDeclaredField("mTextPaint");
             tpf.setAccessible(true);
@@ -325,43 +328,116 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private AlertDialog createDialog(){
-        final View innerView = getLayoutInflater().inflate(R.layout.select, null);
+        final View innerView = getLayoutInflater().inflate(R.layout.selectfeel, null);
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
         ab.setTitle("식감설정");
         ab.setView(innerView);
-
-        mCheckBoxs = new CheckBox[]{
+        mfeelCheckBoxs = new CheckBox[]{
                 (CheckBox) innerView.findViewById(R.id.cb_check_all),
-            (CheckBox) innerView.findViewById(R.id.cb_01),
-            (CheckBox) innerView.findViewById(R.id.cb_02),
-            (CheckBox) innerView.findViewById(R.id.cb_03),
-            (CheckBox) innerView.findViewById(R.id.cb_04),
-            (CheckBox) innerView.findViewById(R.id.cb_05),
-            (CheckBox) innerView.findViewById(R.id.cb_06)
+                (CheckBox) innerView.findViewById(R.id.cb_01),
+                (CheckBox) innerView.findViewById(R.id.cb_02),
+                (CheckBox) innerView.findViewById(R.id.cb_03),
+                (CheckBox) innerView.findViewById(R.id.cb_04),
+                (CheckBox) innerView.findViewById(R.id.cb_05),
+                (CheckBox) innerView.findViewById(R.id.cb_06),
+                (CheckBox) innerView.findViewById(R.id.cb_07),
+                (CheckBox) innerView.findViewById(R.id.cb_08),
+                (CheckBox) innerView.findViewById(R.id.cb_09),
+                (CheckBox) innerView.findViewById(R.id.cb_10),
+                (CheckBox) innerView.findViewById(R.id.cb_11)
         };
-
         ab.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                boolean[] ckfeels = new boolean[mfeelCheckBoxs.length];
+                for (int i = 1; i < mfeelCheckBoxs.length; i++) {
+                    ckfeels[i] = mfeelCheckBoxs[i].isChecked();
+                }
+                feelings.setCkfeels(ckfeels);
+                nowfeelings = feelings.getCkfeels();
+                if(mfeelCheckBoxs[0].isChecked())
+                    feel = "\"\"";
+                else {
+                    feel = "\"feelings\":[\"" + nowfeelings.get(0) + "\"";
+                    for (int i = 1; i < nowfeelings.size(); i++)
+                        feel += ",\"" + nowfeelings.get(i) + "\"";
+                    feel += "]";
+                }
+                list.clear();
+                count = 0;
+                mAdapter.notifyDataSetChanged();
+                hideprograssDialog();
+                addViewListener();
+                loadRecipeList();
             }
         });
-
         ab.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-
-        mCheckBoxs[0].setOnClickListener(new View.OnClickListener() {
+        mfeelCheckBoxs[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(CheckBox checkBox : mCheckBoxs)
-                    checkBox.setChecked(true);
+                for (CheckBox checkBox : mfeelCheckBoxs)
+                    checkBox.setChecked(mfeelCheckBoxs[0].isChecked());
             }
         });
+        return ab.create();
+    }
 
+    private AlertDialog createDialog2(){
+        final ScrollView innerView = (ScrollView)getLayoutInflater().inflate(R.layout.selectcategory, null);
+        final LinearLayout ll = (LinearLayout) innerView.findViewById(R.id.ll_selectcategoty);
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle("카테고리 설정");
+        ab.setView(innerView);
+
+        mCategoryCheckBoxs = new CheckBox[48];
+
+        for(int i=0; i< 48;i++){
+            mCategoryCheckBoxs[i] = new CheckBox(getApplicationContext());
+            mCategoryCheckBoxs[i].setText(categories.getTitle(i));
+            mCategoryCheckBoxs[i].setTextColor(Color.BLACK);
+            ll.addView(mCategoryCheckBoxs[i]);
+        }
+        ab.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                boolean[] ckCategory = new boolean[48];
+                for (int i = 0; i < 48; i++) {
+                    ckCategory[i] = mCategoryCheckBoxs[i].isChecked();
+                }
+                nowcategories = categories.setCkCategory(ckCategory);
+
+                if (feel.isEmpty()) {
+                    category = "\"categories\":[\"" + nowcategories.get(0) + "\"";
+                    for (int i = 1; i < nowcategories.size(); i++)
+                        category += ",\"" + nowcategories.get(i) + "\"";
+                    category += "]";
+                } else {
+                    category = ",\"categories\":[\"" + nowcategories.get(0) + "\"";
+                    for (int i = 1; i < nowcategories.size(); i++)
+                        category += ",\"" + nowcategories.get(i) + "\"";
+                    category += "]";
+                }
+                list.clear();
+                count = 0;
+                mAdapter.notifyDataSetChanged();
+                hideprograssDialog();
+                addViewListener();
+                loadRecipeList();
+            }
+        });
+        ab.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         return ab.create();
     }
 }
