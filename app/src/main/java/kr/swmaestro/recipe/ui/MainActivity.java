@@ -1,10 +1,14 @@
 package kr.swmaestro.recipe.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -66,10 +71,13 @@ public class MainActivity extends AppCompatActivity{
 
     private ProgressDialog progressDialog;
 
-    private int count = 0;                                                  // Recipe number for more loading
-    private int recipeRecallCount = 15;                                       // Recipe number recall a time
+    private int count = 0;                                              // Recipe number for more loading
+    private int recipeRecallCount = 15;                                 // Recipe number recall a time
 
     private final String TAG = "MainActivity";
+
+    private CheckBox[] mCheckBoxs;
+    private Dialog mMainDialog;
 
 
     @Override
@@ -87,6 +95,9 @@ public class MainActivity extends AppCompatActivity{
         Email = pref.getString("email","test@gmail.com");   // get Email
         Nickname = pref.getString("nickname","Test");       // get Nickname
         token = pref.getString("token", "NON");             // get Token
+        mMainDialog = createDialog();
+        mMainDialog.show();
+        Log.i("token", token);
     }
 
     private void initToolbar() {
@@ -197,13 +208,16 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void loadRecipeList() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "?limit=" + recipeRecallCount +"&skip="+count, token,new Response.Listener<JSONArray>() {
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count, token,new Response.Listener<JSONArray>() {
+
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();                                                      // Hide PrograssDialog at the end of the recipe loaded
 
                 String imgUrl = "";
                 String wasLiked = "";
+
+
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
@@ -259,5 +273,46 @@ public class MainActivity extends AppCompatActivity{
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    private AlertDialog createDialog(){
+        final View innerView = getLayoutInflater().inflate(R.layout.select, null);
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle("식감설정");
+        ab.setView(innerView);
+
+        mCheckBoxs = new CheckBox[]{
+                (CheckBox) innerView.findViewById(R.id.cb_check_all),
+            (CheckBox) innerView.findViewById(R.id.cb_01),
+            (CheckBox) innerView.findViewById(R.id.cb_02),
+            (CheckBox) innerView.findViewById(R.id.cb_03),
+            (CheckBox) innerView.findViewById(R.id.cb_04),
+            (CheckBox) innerView.findViewById(R.id.cb_05),
+            (CheckBox) innerView.findViewById(R.id.cb_06)
+        };
+
+        ab.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        ab.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        mCheckBoxs[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(CheckBox checkBox : mCheckBoxs)
+                    checkBox.setChecked(true);
+            }
+        });
+
+        return ab.create();
     }
 }
