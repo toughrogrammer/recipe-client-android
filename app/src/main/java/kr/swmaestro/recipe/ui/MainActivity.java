@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -27,6 +28,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -45,6 +48,7 @@ import java.util.List;
 import kr.swmaestro.recipe.AppController;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.RecycleAdapter;
+import kr.swmaestro.recipe.model.Category;
 import kr.swmaestro.recipe.model.Feelings;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.Request.JsonArrayRequest;
@@ -81,11 +85,17 @@ public class MainActivity extends AppCompatActivity{
 
     private final String TAG = "MainActivity";
 
-    private CheckBox[] mCheckBoxs;
-    private Dialog mMainDialog;
+    private CheckBox[] mfeelCheckBoxs;
+    private CheckBox[] mCategoryCheckBoxs;
+    private Dialog mFeelDialog;
+    private Dialog mCatagoryDialog;
 
     private ArrayList<String> nowfeelings;
+    private ArrayList<Integer> nowcategories;
     private Feelings feelings;
+    private Category categories;
+    private String feel;
+    private String category;
 
 
     @Override
@@ -101,13 +111,19 @@ public class MainActivity extends AppCompatActivity{
     public void initData() {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         Email = pref.getString("email","test@gmail.com");   // get Email
-        Nickname = pref.getString("nickname","Test");       // get Nickname
+        Nickname = pref.getString("nickname", "Test");       // get Nickname
         token = pref.getString("token", "NON");             // get Token
-        mMainDialog = createDialog();
+
 
 
         feelings = new Feelings();
+        categories = new Category();
         nowfeelings = feelings.getFeels();
+        feel = "";
+        category = "";
+
+        mFeelDialog = createDialog();
+        mCatagoryDialog = createDialog2();
     }
 
     private void initToolbar() {
@@ -176,7 +192,9 @@ public class MainActivity extends AppCompatActivity{
                             menuItem.setChecked(true);
                         }
                         if(menuItem.getTitle().equals("식감선택"))
-                            mMainDialog.show();
+                            mFeelDialog.show();
+                        else if(menuItem.getTitle().equals("카테고리선택"))
+                            mCatagoryDialog.show();
                         drawer.closeDrawers();
                         return true;
                     }
@@ -251,14 +269,9 @@ public class MainActivity extends AppCompatActivity{
 
     private void loadRecipeList() {
 
-        String feel = "";
-        feel = "\"" + nowfeelings.get(0)+ "\"";
-        for(int i=1; i<nowfeelings.size(); i++)
-            feel += ",\"" + nowfeelings.get(i) + "\"";
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
-        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count+"&where={\"feelings\":["+ feel +"]}");
+        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count+"&where={"+ feel+ category+"}");
         request.put("token", token);
 
         Log.i("url", request.get("url"));
@@ -347,12 +360,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private AlertDialog createDialog(){
-        final View innerView = getLayoutInflater().inflate(R.layout.select, null);
+        final View innerView = getLayoutInflater().inflate(R.layout.selectfeel, null);
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
         ab.setTitle("식감설정");
         ab.setView(innerView);
 
-        mCheckBoxs = new CheckBox[]{
+        mfeelCheckBoxs = new CheckBox[]{
                 (CheckBox) innerView.findViewById(R.id.cb_check_all),
                 (CheckBox) innerView.findViewById(R.id.cb_01),
                 (CheckBox) innerView.findViewById(R.id.cb_02),
@@ -371,12 +384,21 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                boolean[] ckfeels = new boolean[mCheckBoxs.length];
-                for (int i = 1; i < mCheckBoxs.length; i++) {
-                    ckfeels[i] = mCheckBoxs[i].isChecked();
+                boolean[] ckfeels = new boolean[mfeelCheckBoxs.length];
+                for (int i = 1; i < mfeelCheckBoxs.length; i++) {
+                    ckfeels[i] = mfeelCheckBoxs[i].isChecked();
                 }
                 feelings.setCkfeels(ckfeels);
                 nowfeelings = feelings.getCkfeels();
+                if(mfeelCheckBoxs[0].isChecked())
+                    feel = "\"\"";
+                else {
+                    feel = "\"feelings\":[\"" + nowfeelings.get(0) + "\"";
+                    for (int i = 1; i < nowfeelings.size(); i++)
+                        feel += ",\"" + nowfeelings.get(i) + "\"";
+                    feel += "]";
+                }
+
                 list.clear();
                 count = 0;
                 mAdapter.notifyDataSetChanged();
@@ -393,11 +415,67 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        mCheckBoxs[0].setOnClickListener(new View.OnClickListener() {
+        mfeelCheckBoxs[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(CheckBox checkBox : mCheckBoxs)
-                    checkBox.setChecked(mCheckBoxs[0].isChecked());
+                for (CheckBox checkBox : mfeelCheckBoxs)
+                    checkBox.setChecked(mfeelCheckBoxs[0].isChecked());
+            }
+        });
+
+        return ab.create();
+    }
+
+    private AlertDialog createDialog2(){
+        final ScrollView innerView = (ScrollView)getLayoutInflater().inflate(R.layout.selectcategory, null);
+        final LinearLayout ll = (LinearLayout) innerView.findViewById(R.id.ll_selectcategoty);
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle("카테고리 설정");
+        ab.setView(innerView);
+
+        mCategoryCheckBoxs = new CheckBox[48];
+
+        for(int i=0; i< 48;i++){
+            mCategoryCheckBoxs[i] = new CheckBox(getApplicationContext());
+            mCategoryCheckBoxs[i].setText(categories.getTitle(i));
+            mCategoryCheckBoxs[i].setTextColor(Color.BLACK);
+            ll.addView(mCategoryCheckBoxs[i]);
+        }
+        ab.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                boolean[] ckCategory = new boolean[48];
+                for (int i = 0; i < 48; i++) {
+                    ckCategory[i] = mCategoryCheckBoxs[i].isChecked();
+                }
+                nowcategories = categories.setCkCategory(ckCategory);
+
+                if(feel.isEmpty()){
+                    category = "\"categories\":[\"" + nowcategories.get(0) + "\"";
+                    for (int i = 1; i < nowcategories.size(); i++)
+                        category += ",\"" + nowcategories.get(i) + "\"";
+                    category += "]";
+                }else{
+                    category = ",\"categories\":[\"" + nowcategories.get(0) + "\"";
+                    for (int i = 1; i < nowcategories.size(); i++)
+                        category += ",\"" + nowcategories.get(i) + "\"";
+                    category += "]";
+                }
+
+                list.clear();
+                count = 0;
+                mAdapter.notifyDataSetChanged();
+                hideprograssDialog();
+                addViewListener();
+                loadRecipeList();
+            }
+        });
+
+        ab.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
         });
 
