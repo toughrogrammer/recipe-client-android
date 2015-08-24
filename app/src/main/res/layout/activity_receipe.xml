@@ -48,6 +48,7 @@
                     android:id="@+id/activity_receipe_scroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
                     android:overScrollMode="always">
 
                     <LinearLayout
@@ -98,15 +99,14 @@
                 </LinearLayout>
                 <ImageButton
                     android:id="@+id/activity_receipe__like"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:layout_weight="1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
-                    android:src="@drawable/ic_favorite_white_24dp"
-                    android:background="#00ffffff"
+                    android:scaleType="fitXY"
+                    android:background="@drawable/recipe_btn"
+                    android:adjustViewBounds="true"
                     android:textColor="#ffffff"/>
                 <ImageButton
                     android:id="@+id/activity_receipe_review"
