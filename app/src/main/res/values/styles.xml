@@ -30,5 +30,10 @@
         <item name="android:textSize">48sp</item>
         <item name="android:textColor">#f7ffffff</item>
     </style>
+    <style name="signup" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">#ffffffff</item>
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorControlActivated">#93ffffff</item>
+    </style>
 
 </resources>
