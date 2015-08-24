@@ -100,7 +100,12 @@ public class ReviewActivity extends ActionBarActivity {
 
     private void loadRecipeList() {
 
-        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl  + "/" + 1 + "/reviews", token, new Response.Listener<JSONArray>() {
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.GET+"");
+        request.put("url", AppSetting.recipeUrl  + "/" + 1 + "/reviews");
+        request.put("token", token);
+
+        JsonArrayRequest reviewRequest = JsonArrayRequest.createJsonRequestToken(request, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 hideprograssDialog();
@@ -116,15 +121,7 @@ public class ReviewActivity extends ActionBarActivity {
                         Log.i("conent", jsonObject.getString("content"));
 
                         ReviewListData data = new ReviewListData(author.getString("nickname"),jsonObject.getString("content"),"imgurl");
-//                        HashMap<String,String> reviewmap = new HashMap<String,String>();
-//
-//                        Username = jsonObject.getString("username");
-//                        Comment = jsonObject.getString("comment");
-//
-//                        reviewmap.put(Username,i+"");
-//                        reviewmap.put(Comment,i+"");
-//
-//                        ReviewList.add(reviewmap);
+
                         reviewListData.add(data);
                     } catch (JSONException e) {
                         e.printStackTrace();

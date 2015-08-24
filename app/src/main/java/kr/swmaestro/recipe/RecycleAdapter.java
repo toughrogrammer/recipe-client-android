@@ -17,12 +17,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
 
+import kr.swmaestro.recipe.Request.JsonArrayRequest;
 import kr.swmaestro.recipe.Request.JsonObjectRequest;
 import kr.swmaestro.recipe.model.Recipe;
 import kr.swmaestro.recipe.ui.RecipeActivity;
@@ -95,26 +97,20 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
         holder.mRecycleHolder.mlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = recipe.getItemId();
+                int recipeid = recipe.getItemId();
                 if (recipe.getWasLike().equals("")) {                                       // was not Like item
                     HashMap<String, String> request = new HashMap<>();
                     request.put("model", Request.Method.POST+"");
-                    request.put("url", AppSetting.likeUrl);
+                    request.put("url", AppSetting.recipeUrl + "/" + recipeid + "/likes");
                     request.put("token", token);
-                    request.put("recipe", id+"");
-                    request.put("user", userid);
 
                     JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.i("like", "Success");
-                            try {
-                                holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);
-                                holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));
-                                recipe.setWasLike(response.getString("id"));                // save Like id
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLUE);
+                            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));
+                            recipe.setWasLike("true");                // save Like id
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -126,12 +122,12 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                 } else {
                     HashMap<String, String> request = new HashMap<>();
                     request.put("model", Request.Method.DELETE+"");
-                    request.put("url", AppSetting.likeUrl + "/" + recipe.getWasLike());
+                    request.put("url", AppSetting.recipeUrl + "/" + recipeid + "/likes");
                     request.put("token", token);
 
-                    JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
+                    JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(request, new Response.Listener<JSONArray>() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(JSONArray response) {
                             Log.i("Cancel like", "Success");
                             holder.mRecycleHolder.mlikeButton.setTextColor(Color.BLACK);
                             holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_dislike));

@@ -39,6 +39,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.swmaestro.recipe.AppController;
@@ -237,7 +238,13 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void loadRecipeList() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count, token,new Response.Listener<JSONArray>() {
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.GET+"");
+        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count);
+        request.put("token", token);
+
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(request,new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {

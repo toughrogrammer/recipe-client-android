@@ -3,7 +3,6 @@ package kr.swmaestro.recipe.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -140,8 +139,13 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadmethods() {
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "/" + id+"/methods"
-                , token, new Response.Listener<JSONArray>() {
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.GET+"");
+        request.put("url", AppSetting.recipeUrl + "/" + id+"/methods");
+        request.put("token", token);
+
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(request, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
@@ -173,8 +177,13 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadThumnail(){
-        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(Request.Method.GET, AppSetting.recipeUrl + "/" + id+"/methodThumbs"
-                , token, new Response.Listener<JSONArray>() {
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("model", Request.Method.GET+"");
+        request.put("url", AppSetting.recipeUrl + "/" + id+"/methodThumbs");
+        request.put("token", token);
+
+        JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(request, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
@@ -216,10 +225,10 @@ public class RecipeActivity extends AppCompatActivity{
 
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.POST+"");
-        request.put("url", AppSetting.viewUrl);
+        request.put("url", AppSetting.recipeUrl + "/" + id + "/views");
         request.put("token", token);
-        request.put("recipe", id+"");
-        request.put("user", userid);
+        //request.put("recipe", id+"");
+        //request.put("user", userid);
 
         JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
             @Override

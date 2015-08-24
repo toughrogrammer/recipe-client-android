@@ -1,5 +1,7 @@
 package kr.swmaestro.recipe.Request;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -21,15 +23,27 @@ public class JsonArrayRequest extends Request<JSONArray>{
 
     private String token;
     private Response.Listener<JSONArray> listener;
+    private Map<String, String> mParams;
 
-    private JsonArrayRequest(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
-        super(model, url, errorListener);
-        this.token = token;
+    private JsonArrayRequest(HashMap<String, String> request, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+        super(Integer.parseInt(request.get("model")), request.get("url"), errorListener);
+        this.token = request.get("token");
         listener = successListener;
+
+        if(request.get("model").equals(Method.POST+"")) {
+            Log.i("post", "post");
+            mParams = request;
+            mParams.remove("model");
+            mParams.remove("url");
+            mParams.remove("token");
+        }else{
+            mParams = new HashMap<>();
+        }
+
     }
 
-    public static JsonArrayRequest createJsonRequestToken(int model, String url, String token, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
-        return new JsonArrayRequest(model, url, token, successListener, errorListener);
+    public static JsonArrayRequest createJsonRequestToken(HashMap<String, String> request, Response.Listener<JSONArray> successListener, Response.ErrorListener errorListener) {
+        return new JsonArrayRequest(request, successListener, errorListener);
     }
 
     @Override

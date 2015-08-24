@@ -10,7 +10,7 @@ public class AppSetting {
      */
     final public static String serverUrl = "http://recipe-main.herokuapp.com";
     final public static String tokenUrl = serverUrl + "/auth/me";
-    final public static String predictionUrl = serverUrl + "/predictions/test";
+    final public static String predictionUrl = serverUrl + "/predictions";
     final public static String recipeUrl = serverUrl + "/recipes";
     final public static String likeUrl = serverUrl + "/likes";
     final public static String viewUrl = serverUrl + "/views";
