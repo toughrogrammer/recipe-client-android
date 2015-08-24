@@ -80,22 +80,19 @@ public class MainActivity extends AppCompatActivity{
     private Button mLikeBtn;
     private ProgressDialog progressDialog;
 
-    private int count = 0;                                              // Recipe number for more loading
-    private int recipeRecallCount = 15;                                 // Recipe number recall a time
-
-    private final String TAG = "MainActivity";
-
     private CheckBox[] mfeelCheckBoxs;
     private CheckBox[] mCategoryCheckBoxs;
     private Dialog mFeelDialog;
-    private Dialog mCatagoryDialog;
-
+    private Dialog mCategoryDialog;
     private ArrayList<String> nowfeelings;
     private ArrayList<Integer> nowcategories;
     private Feelings feelings;
     private Category categories;
-    private String feel;
-    private String category;
+    private String feel;                                                // Feeling Select Option    ex) ?where{"feelings":[]}
+    private String category;                                            // Category Select Option   ex) ?where{"categories":[]}
+
+    private int count = 0;                                              // Recipe number for more loading
+    private int recipeRecallCount = 15;                                 // Recipe number recall a time
 
 
     @Override
@@ -114,8 +111,6 @@ public class MainActivity extends AppCompatActivity{
         Nickname = pref.getString("nickname", "Test");       // get Nickname
         token = pref.getString("token", "NON");             // get Token
 
-
-
         feelings = new Feelings();
         categories = new Category();
         nowfeelings = feelings.getFeels();
@@ -123,7 +118,7 @@ public class MainActivity extends AppCompatActivity{
         category = "";
 
         mFeelDialog = createDialog();
-        mCatagoryDialog = createDialog2();
+        mCategoryDialog = createDialog2();
     }
 
     private void initToolbar() {
@@ -194,7 +189,7 @@ public class MainActivity extends AppCompatActivity{
                         if(menuItem.getTitle().equals("식감선택"))
                             mFeelDialog.show();
                         else if(menuItem.getTitle().equals("카테고리선택"))
-                            mCatagoryDialog.show();
+                            mCategoryDialog.show();
                         drawer.closeDrawers();
                         return true;
                     }
@@ -208,17 +203,13 @@ public class MainActivity extends AppCompatActivity{
         mLikeBtn = (Button) findViewById(R.id.bt_recycle_like);
         mRecyclerView.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
-        //swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
-
 
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
         loadRecipeList();
-
         addViewListener();
-
     }
 
     private void addViewListener() {
@@ -232,21 +223,6 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    //리사이클 뷰 좌우로 스크롤해서 없애기(dismiss)
-    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            list.remove(viewHolder.getAdapterPosition());
-            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-        }
-    });
-
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -259,8 +235,6 @@ public class MainActivity extends AppCompatActivity{
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-
-
     private void visibleprogress() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading....");
@@ -268,10 +242,9 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void loadRecipeList() {
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
-        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count+"&where={"+ feel+ category+"}");
+        request.put("url", AppSetting.predictionUrl + "?limit=" + recipeRecallCount +"&skip="+count+"&where={"+ feel + category+"}");
         request.put("token", token);
 
         Log.i("url", request.get("url"));
@@ -282,7 +255,6 @@ public class MainActivity extends AppCompatActivity{
             public void onResponse(JSONArray response) {
                 String imgUrl = "";
                 String wasLiked = "";
-
 
                 for (int i = 0; i < response.length(); i++) {
                     try {
@@ -305,7 +277,6 @@ public class MainActivity extends AppCompatActivity{
                 count += 15;
                 mAdapter.notifyDataSetChanged();
                 hideprograssDialog();                                                      // Hide PrograssDialog at the end of the recipe loaded
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -317,7 +288,6 @@ public class MainActivity extends AppCompatActivity{
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -328,7 +298,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_settings:
                 return true;
@@ -343,7 +312,6 @@ public class MainActivity extends AppCompatActivity{
         try {
             final Field field = collapsingToolbarLayout.getClass().getDeclaredField("mCollapsingTextHelper");
             field.setAccessible(true);
-
             final Object object = field.get(collapsingToolbarLayout);
             final Field tpf = object.getClass().getDeclaredField("mTextPaint");
             tpf.setAccessible(true);
@@ -364,7 +332,6 @@ public class MainActivity extends AppCompatActivity{
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
         ab.setTitle("식감설정");
         ab.setView(innerView);
-
         mfeelCheckBoxs = new CheckBox[]{
                 (CheckBox) innerView.findViewById(R.id.cb_check_all),
                 (CheckBox) innerView.findViewById(R.id.cb_01),
@@ -379,7 +346,6 @@ public class MainActivity extends AppCompatActivity{
                 (CheckBox) innerView.findViewById(R.id.cb_10),
                 (CheckBox) innerView.findViewById(R.id.cb_11)
         };
-
         ab.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -398,7 +364,6 @@ public class MainActivity extends AppCompatActivity{
                         feel += ",\"" + nowfeelings.get(i) + "\"";
                     feel += "]";
                 }
-
                 list.clear();
                 count = 0;
                 mAdapter.notifyDataSetChanged();
@@ -407,14 +372,12 @@ public class MainActivity extends AppCompatActivity{
                 loadRecipeList();
             }
         });
-
         ab.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-
         mfeelCheckBoxs[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -422,7 +385,6 @@ public class MainActivity extends AppCompatActivity{
                     checkBox.setChecked(mfeelCheckBoxs[0].isChecked());
             }
         });
-
         return ab.create();
     }
 
@@ -451,18 +413,17 @@ public class MainActivity extends AppCompatActivity{
                 }
                 nowcategories = categories.setCkCategory(ckCategory);
 
-                if(feel.isEmpty()){
+                if (feel.isEmpty()) {
                     category = "\"categories\":[\"" + nowcategories.get(0) + "\"";
                     for (int i = 1; i < nowcategories.size(); i++)
                         category += ",\"" + nowcategories.get(i) + "\"";
                     category += "]";
-                }else{
+                } else {
                     category = ",\"categories\":[\"" + nowcategories.get(0) + "\"";
                     for (int i = 1; i < nowcategories.size(); i++)
                         category += ",\"" + nowcategories.get(i) + "\"";
                     category += "]";
                 }
-
                 list.clear();
                 count = 0;
                 mAdapter.notifyDataSetChanged();
@@ -471,14 +432,12 @@ public class MainActivity extends AppCompatActivity{
                 loadRecipeList();
             }
         });
-
         ab.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-
         return ab.create();
     }
 }

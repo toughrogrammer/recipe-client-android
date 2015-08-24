@@ -62,7 +62,6 @@ public class ReviewListAdapter extends BaseAdapter {
 
         mUserNameTv.setText(reviewArraylist.get(position).getUsername());
         mCommentTv.setText(reviewArraylist.get(position).getComment());
-        Log.i("ss", "ss");
 
         ImageView imageView = (ImageView) row.findViewById(R.id.review_list_Img);
         try{
@@ -74,7 +73,6 @@ public class ReviewListAdapter extends BaseAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return row;
     }
 }

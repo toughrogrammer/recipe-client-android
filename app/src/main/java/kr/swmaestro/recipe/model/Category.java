@@ -1,8 +1,6 @@
 package kr.swmaestro.recipe.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Created by lk on 2015. 8. 25..

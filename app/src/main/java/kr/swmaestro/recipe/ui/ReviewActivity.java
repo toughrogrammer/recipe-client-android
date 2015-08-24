@@ -50,9 +50,6 @@ public class ReviewActivity extends ActionBarActivity {
 
     private ProgressDialog progressDialog;
 
-    private int count = 0;                                                  // Recipe number for more loading
-    private int recipeRecallCount = 15;
-
     private ReviewListAdapter reviewListAdapter;
 
     @Override
@@ -66,7 +63,6 @@ public class ReviewActivity extends ActionBarActivity {
     }
 
     private void init() {
-
         Intent intent = getIntent();
         recipeId = intent.getStringExtra("recipeid");
 
@@ -87,7 +83,6 @@ public class ReviewActivity extends ActionBarActivity {
                 registerComment(mCommentEt.getText().toString());
             }
         });
-
     }
 
     public void getPreferenceData() {
@@ -95,12 +90,11 @@ public class ReviewActivity extends ActionBarActivity {
         Username = pref.getString("useranme","testname");   // get Email
         Comment = pref.getString("comment","hellow");       // get Comment
         token = pref.getString("token", "NON");             // get Token
-        this.userid = pref.getString("id", "NON");      // get userId
+        this.userid = pref.getString("id", "NON");          // get userId
     }
 
 
     private void loadRecipeList() {
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
         request.put("url", AppSetting.recipeUrl  + "/" + recipeId + "/reviews");
@@ -128,7 +122,6 @@ public class ReviewActivity extends ActionBarActivity {
                         e.printStackTrace();
                     }
                 }
-
                 reviewListAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
@@ -152,11 +145,9 @@ public class ReviewActivity extends ActionBarActivity {
         request.put("recipe", recipeId);
         request.put("content", content);
 
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -164,25 +155,18 @@ public class ReviewActivity extends ActionBarActivity {
                 Log.e("Volley", "Reiveiw Request : " + error.networkResponse.data.toString());
             }
         });
-
         queue.add(jsonObjectRequest);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_review, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

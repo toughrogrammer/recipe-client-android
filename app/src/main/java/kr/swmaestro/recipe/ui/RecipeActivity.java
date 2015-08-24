@@ -35,20 +35,7 @@ import kr.swmaestro.recipe.util.AppSetting;
  * Created by lk on 2015. 8. 15..
  */
 public class RecipeActivity extends AppCompatActivity{
-    //식감  Feelings []
-    //조리방법 methods []
-    //조리과정이미지 methodThumbs {thumbnail {reference} }
-    //카테고리 category { label }
-    //썸네일(레시피 완성본) thumbnail { reference }
-    //쿡타임 cooktime (int)
-    //인분 amount
-    //칼로리 (1인분기준)  calorie
-    //보관온도 temperature
-    //보관일 expire (int)
-    //title
-    //id
 
-    //todo Refactoring
     private TextView tvMethods;
     private String id;              // RecipeID
     private String token;           // UserToken
@@ -110,7 +97,6 @@ public class RecipeActivity extends AppCompatActivity{
 
 
     private void loadmethods() {
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
         request.put("url", AppSetting.recipeUrl + "/" + id+"/methods");
@@ -148,7 +134,6 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void loadThumnail(){
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.GET+"");
         request.put("url", AppSetting.recipeUrl + "/" + id+"/methodThumbs");
@@ -157,7 +142,6 @@ public class RecipeActivity extends AppCompatActivity{
         JsonArrayRequest recipeRequest = JsonArrayRequest.createJsonRequestToken(request, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-
                 Log.i("test",response.toString());
                 String imgurl = "";
                 //이곳에 맨 처음 시작부분 layout.addView
@@ -178,8 +162,6 @@ public class RecipeActivity extends AppCompatActivity{
                         e.printStackTrace();
                     }
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -192,14 +174,10 @@ public class RecipeActivity extends AppCompatActivity{
     }
 
     private void sendViewEvent(){
-
-
         HashMap<String, String> request = new HashMap<>();
         request.put("model", Request.Method.POST+"");
         request.put("url", AppSetting.recipeUrl + "/" + id + "/views");
         request.put("token", token);
-        //request.put("recipe", id+"");
-        //request.put("user", userid);
 
         JsonObjectRequest recipeRequest = new JsonObjectRequest(request, new Response.Listener<JSONObject>() {
             @Override
@@ -212,8 +190,6 @@ public class RecipeActivity extends AppCompatActivity{
                 Log.e("volley", error.toString());
             }
         });
-
         AppController.getInstance().addToRequestQueue(recipeRequest);
-
     }
 }

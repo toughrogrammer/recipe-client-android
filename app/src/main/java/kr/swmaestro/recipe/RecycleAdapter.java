@@ -41,7 +41,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
 
     private String token;
     private String userid;
-    private int likeFlage = 0;
 
     public RecycleAdapter(List<Recipe> item, Context context) {
         mImageLoader = AppController.getInstance().getImageLoader();
