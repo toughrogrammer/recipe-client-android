@@ -1,6 +1,7 @@
 package kr.swmaestro.recipe.ui;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 import kr.swmaestro.recipe.model.ErrorMap;
 import kr.swmaestro.recipe.R;
 import kr.swmaestro.recipe.Request.SignUpRequest;
+import kr.swmaestro.recipe.util.AppSetting;
 
 /**
  * Created by lk on 2015. 7. 27..
@@ -42,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText passwordEt;
     private EditText passwordEt2;
     private EditText nickname;
+    private TextView join;
 
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
 
@@ -54,12 +58,18 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        Typeface tf = Typeface.createFromAsset(getAssets(), AppSetting.logoFont);
+
         usernameEt = (EditText) findViewById(R.id.et_signup_username);
         emailEt = (EditText) findViewById(R.id.et_signup_email);
         passwordEt = (EditText) findViewById(R.id.et_signup_password);
         passwordEt2 = (EditText) findViewById(R.id.et_signup_password2);
         nickname = (EditText) findViewById(R.id.et_signup_nickname);
+        join = (TextView) findViewById(R.id.Join_title);
+        join.setTypeface(tf,Typeface.BOLD);
+
         final Button sendBt = (Button) findViewById(R.id.bt_signup_send);
+        sendBt.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
         final View coordinatorLayoutView = findViewById(R.id.sb_signup_snackbarposition);
 
         sendBt.setOnClickListener(new View.OnClickListener() {

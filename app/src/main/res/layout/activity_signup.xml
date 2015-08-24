@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/Join"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/Join_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="J o i n"
+                android:textSize="90sp"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="30dp"/>
+        </LinearLayout>
     <LinearLayout
+        android:layout_below="@+id/Join"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:focusable="true"
+            android:theme="@style/signup"
             android:focusableInTouchMode="true"
             android:layout_marginRight="40dp">
 
@@ -22,7 +43,7 @@
                 android:hint=" E-mail"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -30,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:theme="@style/signup"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_marginRight="40dp">
@@ -42,13 +64,14 @@
                 android:password="true"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/signup"
             android:layout_marginLeft="40dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -62,13 +85,14 @@
                 android:password="true"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/signup"
             android:layout_marginLeft="40dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -81,13 +105,14 @@
                 android:hint=" User name"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/signup"
             android:layout_marginLeft="40dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -100,17 +125,25 @@
                 android:hint=" Nick Name"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/bt_signup_send" />
-
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:background="#ca000000"
+            android:textColor="#e1e4e604"
+            android:layout_marginTop="16dp"
+            android:textSize="16dp"
+            android:id="@+id/bt_signup_send" />
+    </RelativeLayout>
+        <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="New Text"
@@ -123,4 +156,5 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/sb_signup_snackbarposition">
     </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 </FrameLayout>
