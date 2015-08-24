@@ -20,5 +20,13 @@
         android:state_checked="true"
         android:drawable="@drawable/ic_favorite_red_24dp">
     </item>
+    <item
+        android:state_checkable="true"
+        android:drawable="@drawable/ic_favorite_red_24dp">
+    </item>
+    <item
+        android:state_checked="true"
+        android:drawable="@drawable/ic_favorite_red_24dp">
+    </item>
 
 </selector>
