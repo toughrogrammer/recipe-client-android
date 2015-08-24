@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,11 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
     private String token;
     private TextView mEmailTv;                                          // TextView in drawer to show the Email
     private TextView mNickTv;                                           // TextView in drawer to show the Nickname
-
+    private Button mLikeBtn;
     private ProgressDialog progressDialog;
 
     private int count = 0;                                              // Recipe number for more loading
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+
     private void initNavtigationView() {
 
         mEmailTv = (TextView) findViewById(R.id.activity_main_emailTv);
@@ -121,10 +125,13 @@ public class MainActivity extends AppCompatActivity{
         mNickTv.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
         mNickTv.setText(Nickname);
 
+        //드로어를 여는 버튼에 애니메이션 효과를 적용함
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.setDrawerListener(drawerToggle);
         drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, R.string.hello_world, R.string.hello_world);
-
+        //collapsingToolbarLayout
+        makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
+        //드로어에 있는 아이템들의 폰트를 바꿔줌
         mNavigationView = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         mNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -146,9 +153,13 @@ public class MainActivity extends AppCompatActivity{
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.activity_main_collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle("추천요리");
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //이걸해줘야 폰트적용됨
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
 
         NavigationView nv = (NavigationView) findViewById(R.id.activity_main_navigation_view);
         nv.setNavigationItemSelectedListener(
@@ -168,8 +179,11 @@ public class MainActivity extends AppCompatActivity{
         visibleprogress();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mLikeBtn = (Button) findViewById(R.id.bt_recycle_like);
         mRecyclerView.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
+        swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
+
 
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -185,7 +199,22 @@ public class MainActivity extends AppCompatActivity{
                 loadRecipeList();
             }
         });
+
     }
+    //리사이클 뷰 좌우로 스크롤해서 없애기(dismiss)
+    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            list.remove(viewHolder.getAdapterPosition());
+            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+        }
+    });
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -267,7 +296,20 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+    //CollapsingToolbarLayout 폰트설정
+    private void makeCollapsingToolbarLayoutLooksGood(CollapsingToolbarLayout collapsingToolbarLayout) {
+        try {
+            final Field field = collapsingToolbarLayout.getClass().getDeclaredField("mCollapsingTextHelper");
+            field.setAccessible(true);
 
+            final Object object = field.get(collapsingToolbarLayout);
+            final Field tpf = object.getClass().getDeclaredField("mTextPaint");
+            tpf.setAccessible(true);
+
+            ((TextPaint) tpf.get(object)).setTypeface(Typeface.createFromAsset(getAssets(), "Yoon.ttf"));
+        } catch (Exception ignored) {
+        }
+    }
     private void hideprograssDialog() {
         if (progressDialog != null) {
             progressDialog.dismiss();

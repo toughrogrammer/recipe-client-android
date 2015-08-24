@@ -75,7 +75,6 @@ public class ReviewActivity extends ActionBarActivity {
         mRegisterBT = (Button) findViewById(R.id.activity_review_registerBt);
         mRegisterBT.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
         mCommentEt.setTypeface(Typeface.createFromAsset(getAssets(), "NanumBarunGothicBold.ttf"));
-        reviewListData = new ArrayList<>();
 
         ListView listView = (ListView) findViewById(R.id.activity_review_lv);
         reviewListAdapter = new ReviewListAdapter(this, R.layout.review_custom_list,reviewListData);

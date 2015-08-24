@@ -1,83 +1,79 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="3dp"
-    card_view:cardElevation="1dp">
-
-    <LinearLayout
-        android:id="@+id/rl_recycle_parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="8dp"
-        android:background="#deeadb"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/nv_recycle_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginBottom="0dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY" />
-        </FrameLayout>
+    android:layout_height="wrap_content">
 
 
-        <FrameLayout
-            android:id="@+id/rl_recycle_bottom"
+    <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/nv_recycle_image"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:background="#c4d0b6">
+            android:layout_margin="16dp"
+            card_view:cardCornerRadius="3dp"
+            card_view:cardElevation="1dp">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="#deeadb">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <Button
-                    android:id="@+id/bt_recycle_like"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:background="@mipmap/ic_launcher"
-                    android:src="@mipmap/ic_launcher" />
-            </LinearLayout>
-
-            <LinearLayout
+                android:id="@+id/ImagLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="6">
-                <TextView
-                    android:id="@+id/tv_recycle_title"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp">
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/nv_recycle_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Header"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="20.5sp"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY" />
             </LinearLayout>
 
-        </FrameLayout>
 
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/rl_recycle_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ImagLayout"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="#c4d1aa">
 
-</android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/bt_recycle_like"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/main_btn"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:id="@+id/tv_recycle_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Header"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="20.5sp"/>
+                </LinearLayout>
+
+            </FrameLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

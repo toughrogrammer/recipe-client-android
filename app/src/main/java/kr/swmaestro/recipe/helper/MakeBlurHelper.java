@@ -13,6 +13,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 /**
  * Created by Kahye on 15. 8. 1..
  */
+//Bitmap블러 처리
 public class MakeBlurHelper {
     public static Bitmap makeBlur(Context context, Bitmap sentBitmap, int radius) {
 
@@ -24,7 +25,7 @@ public class MakeBlurHelper {
                     Allocation.USAGE_SCRIPT);
             final Allocation output = Allocation.createTyped(rs, input.getType());
             final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-            script.setRadius(radius); //0.0f ~ 25.0f
+            script.setRadius(radius);
             script.setInput(input);
             script.forEach(output);
             output.copyTo(bitmap);

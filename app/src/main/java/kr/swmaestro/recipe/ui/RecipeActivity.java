@@ -3,6 +3,7 @@ package kr.swmaestro.recipe.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -105,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity{
 
     private void loadrecipe() {
 
-        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFontBold));
+        tvMethods.setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont));
 
         Tv_title = (TextView) findViewById(R.id.activity_receipe_title);
 

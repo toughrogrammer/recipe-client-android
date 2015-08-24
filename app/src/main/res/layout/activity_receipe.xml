@@ -97,7 +97,7 @@
                     android:layout_weight="5">
                 </LinearLayout>
                 <ImageButton
-                    android:id="@+id/bt_recycle_like"
+                    android:id="@+id/activity_receipe__like"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
