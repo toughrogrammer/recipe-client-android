@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -176,6 +177,7 @@ public class MainActivity extends AppCompatActivity{
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+
         makeCollapsingToolbarLayoutLooksGood(collapsingToolbarLayout);
 
         NavigationView nv = (NavigationView) findViewById(R.id.activity_main_navigation_view);
@@ -356,7 +358,7 @@ public class MainActivity extends AppCompatActivity{
                 }
                 feelings.setCkfeels(ckfeels);
                 nowfeelings = feelings.getCkfeels();
-                if(mfeelCheckBoxs[0].isChecked())
+                if (mfeelCheckBoxs[0].isChecked())
                     feel = "\"\"";
                 else {
                     feel = "\"feelings\":[\"" + nowfeelings.get(0) + "\"";
@@ -385,6 +387,9 @@ public class MainActivity extends AppCompatActivity{
                     checkBox.setChecked(mfeelCheckBoxs[0].isChecked());
             }
         });
+        for (int i = 0; i < mfeelCheckBoxs.length; i++) {
+            mfeelCheckBoxs[i].setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont));
+        }
         return ab.create();
     }
 
@@ -438,6 +443,9 @@ public class MainActivity extends AppCompatActivity{
                 dialog.dismiss();
             }
         });
+        for (int i = 0; i < mfeelCheckBoxs.length; i++) {
+            mCategoryCheckBoxs[i].setTypeface(Typeface.createFromAsset(getAssets(), AppSetting.appFont));
+        }
         return ab.create();
     }
 }
