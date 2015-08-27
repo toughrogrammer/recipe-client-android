@@ -16,14 +16,7 @@
         android:state_selected="false"
         android:drawable="@drawable/ic_icon_customer">
     </item>
-    <item
-        android:state_checkable="true"
-        android:drawable="@drawable/ic_icon_like">
-    </item>
-    <item
-        android:state_checked="true"
-        android:drawable="@drawable/ic_icon_like">
-    </item>
+
 
 
 </selector>

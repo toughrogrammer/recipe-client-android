@@ -128,7 +128,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.i("Cancel like", "Success");
-                            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_dislike));
+                            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));
                             recipe.setWasLike("");                                          // delete Like id
                         }
                     }, new Response.ErrorListener() {
