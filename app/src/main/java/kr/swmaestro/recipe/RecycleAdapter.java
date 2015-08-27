@@ -93,7 +93,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
         holder.mRecycleHolder.mImage.setImageUrl(recipe.getImageUrl(), mImageLoader);
         holder.mRecycleHolder.mTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), "NanumBarunGothic.ttf"));
         if(recipe.getWasLike().equals("false"))                                                 // if wasLike
-            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_dislike));                    // set Like Button wasLike
+            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));                    // set Like Button wasLike
         holder.mRecycleHolder.mlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +108,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.i("like", "Success");
-                            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_customer));
+                            holder.mRecycleHolder.mlikeButton.setBackground(context.getResources().getDrawable(R.drawable.ic_icon_like));
                             recipe.setWasLike("true");                // save Like id
                         }
                     }, new Response.ErrorListener() {
