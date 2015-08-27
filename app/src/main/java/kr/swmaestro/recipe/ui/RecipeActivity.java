@@ -65,7 +65,7 @@ public class RecipeActivity extends AppCompatActivity{
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         scrollView = (HorizontalScrollView) findViewById(R.id.activity_receipe_scroll);
         scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-        like = (ImageButton) findViewById(R.id.bt_recycle_like);
+        like = (ImageButton) findViewById(R.id.activity_receipe_like);
         reviewlist = (ImageButton) findViewById(R.id.activity_receipe_review);
 
         reviewlist.setOnClickListener(new View.OnClickListener() {

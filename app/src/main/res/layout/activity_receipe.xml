@@ -98,7 +98,7 @@
                     android:layout_weight="5">
                 </LinearLayout>
                 <ImageButton
-                    android:id="@+id/activity_receipe__like"
+                    android:id="@+id/activity_receipe_like"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginBottom="8dp"
