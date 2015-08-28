@@ -218,6 +218,8 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+        swipeToDismissTouchHelper.attachToRecyclerView(mRecyclerView);
+
         loadRecipeList();
         mScrollListener = new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
             @Override
@@ -306,6 +308,21 @@ public class MainActivity extends AppCompatActivity{
         });
         AppController.getInstance().addToRequestQueue(recipeRequest);
     }
+
+    //리사이클 뷰 좌우로 스크롤해서 없애기(dismiss)
+    ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            list.remove(viewHolder.getAdapterPosition());
+            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+        }
+    });
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

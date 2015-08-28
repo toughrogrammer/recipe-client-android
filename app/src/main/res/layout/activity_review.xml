@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kr.swmaestro.recipe.ui.ReviewActivity">
+    tools:context="kr.swmaestro.recipe.ui.ReviewActivity"
+    android:background="#ffffff">
 
     <ListView
         android:id="@+id/activity_review_lv"
@@ -22,9 +23,11 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="4dp"
+            android:theme="@style/review"
             android:background="#ffffff"
             android:textSize="15sp"
-            android:hint="댓글을 입력하세요">
+            android:textColorHint="#000000"
+            android:hint=" 댓글을 입력하세요.">
         </EditText>
         <Button
             android:id="@+id/activity_review_registerBt"
