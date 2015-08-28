@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -192,6 +193,10 @@ public class MainActivity extends AppCompatActivity{
                             mFeelDialog.show();
                         else if(menuItem.getTitle().equals("카테고리선택"))
                             mCategoryDialog.show();
+                        else if(menuItem.getTitle().equals("로그아웃")){
+                            startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                        }
+
                         drawer.closeDrawers();
                         return true;
                     }
