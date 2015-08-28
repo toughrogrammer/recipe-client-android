@@ -96,6 +96,9 @@ public class MainActivity extends AppCompatActivity{
     private int count = 0;                                              // Recipe number for more loading
     private int recipeRecallCount = 15;                                 // Recipe number recall a time
 
+    private EndlessRecyclerOnScrollListener mScrollListener;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,18 +219,27 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setAdapter(mAdapter);
 
         loadRecipeList();
-        addViewListener();
-    }
-
-    private void addViewListener() {
-        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
+        mScrollListener = new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
                 Log.i("onLoadMore", current_page + "");
                 visibleprogress();
                 loadRecipeList();
             }
-        });
+        };
+        mRecyclerView.addOnScrollListener(mScrollListener);
+    }
+
+    private void addViewListener() {
+        mScrollListener = new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                Log.i("onLoadMore", current_page + "");
+                visibleprogress();
+                loadRecipeList();
+            }
+        };
+        mRecyclerView.setOnScrollListener(mScrollListener);
     }
 
     @Override
